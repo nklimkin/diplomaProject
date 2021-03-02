@@ -1,6 +1,7 @@
 package model;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
@@ -11,7 +12,7 @@ public abstract class BaseEntity {
     @Id
     @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1, initialValue = START_SEQ)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq")
-    private int id;
+    private Integer id;
 
     public BaseEntity() {
     }
@@ -23,4 +24,6 @@ public abstract class BaseEntity {
     public void setId(int id) {
         this.id = id;
     }
+
+    public boolean isNew() {return this.id == null;}
 }

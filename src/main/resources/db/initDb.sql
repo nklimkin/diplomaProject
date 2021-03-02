@@ -27,7 +27,7 @@ ALTER TABLE user_roles ADD CONSTRAINT user_roles UNIQUE (user_id, role);
 CREATE TABLE restaurants (
     id INT DEFAULT global_seq.nextval PRIMARY KEY,
     label VARCHAR(255) UNIQUE NOT NULL,
-    rating INT DEFAULT 0,
+    rating DECIMAL DEFAULT 0,
     number_of_voters INT DEFAULT 0
 );
 
