@@ -8,16 +8,16 @@ DROP SEQUENCE IF EXISTS global_seq;
 CREATE SEQUENCE global_seq START WITH 100000;
 
 CREATE TABLE users (
-    id INT DEFAULT global_seq.nextval PRIMARY KEY,
+    id INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     surname VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    registered TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    registered DATE DEFAULT CURRENT_DATE
 );
 
 CREATE TABLE user_roles (
-    user_id INT NOT NULL,
+    user_id INTEGER NOT NULL,
     role VARCHAR(255) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
@@ -25,14 +25,14 @@ CREATE TABLE user_roles (
 ALTER TABLE user_roles ADD CONSTRAINT user_roles UNIQUE (user_id, role);
 
 CREATE TABLE restaurants (
-    id INT DEFAULT global_seq.nextval PRIMARY KEY,
+    id INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
     label VARCHAR(255) UNIQUE NOT NULL,
     rating DECIMAL DEFAULT 0,
     number_of_voters INT DEFAULT 0
 );
 
 CREATE TABLE dishes (
-    id INT DEFAULT global_seq.nextval PRIMARY KEY,
+    id INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
     restaurant_id INT NOT NULL,
     label VARCHAR(255) NOT NULL,
     price DECIMAL NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE dishes (
 ALTER TABLE dishes ADD CONSTRAINT dish_restaurant UNIQUE (label, restaurant_id);
 
 CREATE TABLE history (
-    id INT DEFAULT global_seq.nextval PRIMARY KEY,
+    id INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
     user_id INT NOT NULL,
     restaurant_id INT NOT NULL,
     date_time TIMESTAMP NOT NULL,

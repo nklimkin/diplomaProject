@@ -2,51 +2,49 @@ package repository;
 
 import model.User;
 import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
+@Transactional()
 public class JpaUserRep implements UserRepository{
 
-    @PersistenceContext
-    private EntityManager em;
+    private final Sort SORT_BY_NAME = Sort.by(Sort.Direction.ASC, "name", "email");
+
+    CrudUserRepository crudUserRepository;
+
+    public JpaUserRep(CrudUserRepository crudUserRepository) {
+        this.crudUserRepository = crudUserRepository;
+    }
+
     @Override
     public User save(User user) {
-        if (user.isNew()) {
-            em.persist(user);
-            return user;
-        } else {
-            return em.merge(user);
-        }
+        return crudUserRepository.save(user);
     }
 
     @Override
     public User get(int id) {
-        return em.find(User.class, id);
+        return crudUserRepository.findById(id).orElse(null);
     }
 
     @Override
     public User getByEmail(String email) {
-        List<User> users = em.createNamedQuery(User.GET_BY_EMAIL, User.class)
-                .setParameter("userEmail", email)
-                .getResultList();
-        return DataAccessUtils.singleResult(users);
+        return crudUserRepository.getUserByEmail(email);
     }
 
     @Override
     public List<User> getAll() {
-        return em.createNamedQuery(User.GET_ALL, User.class)
-                .getResultList();
+        return crudUserRepository.findAll(SORT_BY_NAME);
     }
 
     @Override
     public boolean delete(int id) {
-        return em.createNamedQuery(User.DELETE, User.class)
-                .setParameter("id", id)
-                .executeUpdate() != 0;
+        return crudUserRepository.delete(id) != 0;
     }
 }

@@ -1,11 +1,13 @@
 package model;
 
+import org.springframework.data.domain.Persistable;
+
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Persistable<Integer> {
 
     public static final int START_SEQ = 100_000;
 
@@ -17,7 +19,12 @@ public abstract class BaseEntity {
     public BaseEntity() {
     }
 
-    public int getId() {
+    public BaseEntity(Integer id) {
+        this.id = id;
+    }
+
+    @Override
+    public Integer getId() {
         return id;
     }
 
@@ -25,5 +32,6 @@ public abstract class BaseEntity {
         this.id = id;
     }
 
+    @Override
     public boolean isNew() {return this.id == null;}
 }
