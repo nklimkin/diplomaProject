@@ -43,10 +43,10 @@ ALTER TABLE dishes ADD CONSTRAINT dish_restaurant UNIQUE (label, restaurant_id);
 
 CREATE TABLE history (
     id INTEGER DEFAULT global_seq.nextval PRIMARY KEY,
-    user_id INT NOT NULL,
-    restaurant_id INT NOT NULL,
-    date_time TIMESTAMP NOT NULL,
-    grade INT NOT NULL,
+    user_id INTEGER NOT NULL,
+    restaurant_id INTEGER NOT NULL,
+    date_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    grade INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (restaurant_id) REFERENCES restaurants(id)
 )

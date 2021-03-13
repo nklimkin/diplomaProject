@@ -29,4 +29,9 @@ INSERT INTO DISHES (RESTAURANT_ID, LABEL, PRICE)
            ('100005', 'dish13', '10'),
            ('100005', 'dish23', '160');
 
+INSERT INTO HISTORY (USER_ID, RESTAURANT_ID, GRADE)
+    VALUES ('100000', '100003',  '4'),
+           ('100001', '100004', '5'),
+           ('100002', '100005', '2');
+
 

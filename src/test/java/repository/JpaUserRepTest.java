@@ -35,7 +35,7 @@ public class JpaUserRepTest {
 
     @Test
     public void save() {
-        rep.save(UserTestData.getNew());
+        User save = rep.save(UserTestData.getNew());
         User actual = rep.get(UserTestData.NEW);
         User expected = UserTestData.newUser;
         assertThat(actual).isEqualToIgnoringGivenFields(expected, "registered");

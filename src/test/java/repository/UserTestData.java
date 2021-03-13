@@ -13,7 +13,7 @@ public class UserTestData {
     public static final int USER2 = 100001;
     public static final int ADMIN1 = 100002;
     public static final int NOT_FOUND = 1;
-    public static final int NEW = 100012;
+    public static final int NEW = 100015;
 
     public static User user1 = new User(100000, "user1", "user1_surName", "user1@email.ru",
             "user1_pass", UserRoles.USER);
@@ -24,7 +24,7 @@ public class UserTestData {
     public static User admin1 = new User(100002, "admin1", "admin1_surName", "admin1@email.ru",
             "admin1_pass", UserRoles.ADMIN);
 
-    public static User newUser = new User(100012, "newUser", "newUser_surname", "newUser@email.ru", "newUser_pass",
+    public static User newUser = new User(100015, "newUser", "newUser_surname", "newUser@email.ru", "newUser_pass",
             UserRoles.USER);
 
     public static User updated = new User(100000, "update", "update_surName", "updated@email.ru", "updUser_pass",

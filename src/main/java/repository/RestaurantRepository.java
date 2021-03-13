@@ -1,6 +1,9 @@
 package repository;
 
+import model.Dish;
 import model.Restaurant;
+
+import java.util.List;
 
 public interface RestaurantRepository {
 
@@ -10,8 +13,8 @@ public interface RestaurantRepository {
 
     Restaurant getBestOne();
 
-    Restaurant delete(int id);
+    boolean delete(int id);
 
-    Restaurant getAll();
+    List<Restaurant> getAll();
 
 }

@@ -12,7 +12,6 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
-@Transactional()
 public class JpaUserRep implements UserRepository{
 
     private final Sort SORT_BY_NAME = Sort.by(Sort.Direction.ASC, "name", "email");

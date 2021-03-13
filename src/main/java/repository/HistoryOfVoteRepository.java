@@ -2,13 +2,17 @@ package repository;
 
 import model.HistoryOfVote;
 
+import java.util.List;
+
 public interface HistoryOfVoteRepository {
 
-    HistoryOfVote save(HistoryOfVote historyOfVote);
+    HistoryOfVote save(HistoryOfVote historyOfVote, int restaurantId, int userId);
 
-    HistoryOfVote delete(int id);
+    boolean delete(int id);
 
     HistoryOfVote get(int id);
 
-    HistoryOfVote getAll();
+    List<HistoryOfVote> getAll();
+
+    HistoryOfVote getHistoryOfVoteByUserId(int userId);
 }
