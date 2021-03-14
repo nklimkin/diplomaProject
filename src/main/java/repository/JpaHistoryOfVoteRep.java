@@ -1,6 +1,6 @@
 package repository;
 
-import model.HistoryOfVote;
+import model.Vote;
 import model.Restaurant;
 import model.User;
 import org.springframework.data.domain.Sort;
@@ -24,12 +24,12 @@ public class JpaHistoryOfVoteRep implements HistoryOfVoteRepository{
     }
 
     @Override
-    public HistoryOfVote save(HistoryOfVote historyOfVote, int restaurantId, int userId) {
+    public Vote save(Vote vote, int restaurantId, int userId) {
         Restaurant restaurant = crudRestaurantRepository.getOne(restaurantId);
         User user = crudUserRepository.getOne(userId);
-        historyOfVote.setUser(user);
-        historyOfVote.setRestaurant(restaurant);
-        return crudHistoryOfVoteRepository.save(historyOfVote);
+        vote.setUser(user);
+        vote.setRestaurant(restaurant);
+        return crudHistoryOfVoteRepository.save(vote);
     }
 
     @Override
@@ -38,17 +38,17 @@ public class JpaHistoryOfVoteRep implements HistoryOfVoteRepository{
     }
 
     @Override
-    public HistoryOfVote get(int id) {
+    public Vote get(int id) {
         return crudHistoryOfVoteRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<HistoryOfVote> getAll() {
+    public List<Vote> getAll() {
         return crudHistoryOfVoteRepository.findAll(SORT_BY_DATE);
     }
 
     @Override
-    public HistoryOfVote getHistoryOfVoteByUserId(int userId) {
+    public Vote getHistoryOfVoteByUserId(int userId) {
         return crudHistoryOfVoteRepository.getHistoryOfVoteByUserId(userId);
     }
 }

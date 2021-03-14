@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "history")
-public class HistoryOfVote extends BaseEntity{
+public class Vote extends BaseEntity{
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -27,7 +27,7 @@ public class HistoryOfVote extends BaseEntity{
     @NotBlank
     private int grade;
 
-    public HistoryOfVote(Integer id, @NotNull User user, @NotNull LocalDateTime localDateTime, @NotNull Restaurant restaurant, @NotBlank int grade) {
+    public Vote(Integer id, @NotNull User user, @NotNull LocalDateTime localDateTime, @NotNull Restaurant restaurant, @NotBlank int grade) {
         super(id);
         this.user = user;
         this.localDateTime = localDateTime;
@@ -35,13 +35,13 @@ public class HistoryOfVote extends BaseEntity{
         this.grade = grade;
     }
 
-    public HistoryOfVote() {
+    public Vote() {
 
     }
 
-    public HistoryOfVote(HistoryOfVote historyOfVote) {
-        this(historyOfVote.getId(), historyOfVote.getUser(), historyOfVote.getLocalDateTime(),
-                historyOfVote.getRestaurant(), historyOfVote.getGrade());
+    public Vote(Vote vote) {
+        this(vote.getId(), vote.getUser(), vote.getLocalDateTime(),
+                vote.getRestaurant(), vote.getGrade());
     }
 
     public User getUser() {

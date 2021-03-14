@@ -1,4 +1,5 @@
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import repository.JpaHistoryOfVoteRep;
 import repository.JpaUserRep;
 import repository.UserRepository;
 import repository.UserTestData;
@@ -12,13 +13,10 @@ public class SpringMain {
                 "classpath:spring/spring-db.xml")) {
             System.out.println("Bean definition names: " + Arrays.toString(context.getBeanDefinitionNames()));
 
-            JpaUserRep jpaUserRep = context.getBean(JpaUserRep.class);
+            JpaHistoryOfVoteRep jpa = context.getBean(JpaHistoryOfVoteRep.class);
 
-            jpaUserRep.getAll().forEach(System.out::println);
+            jpa.getAll().forEach(System.out::println);
 
-            jpaUserRep.save(UserTestData.updated);
-
-            jpaUserRep.getAll().forEach(System.out::println);
         }
     }
 }
