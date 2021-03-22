@@ -1,5 +1,6 @@
 package repository;
 
+import model.Status;
 import model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,8 +9,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
+import testData.UserTestData;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class JpaUserRepTest {
     @Test
     public void delete() {
         rep.delete(UserTestData.USER1);
-        assertThat(rep.get(UserTestData.USER1)).isEqualTo(null);
+        assertThat(rep.get(UserTestData.USER1).getStatus()).isEqualTo(Status.DELETE);
     }
 
     @Test

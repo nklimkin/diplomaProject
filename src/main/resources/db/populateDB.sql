@@ -1,6 +1,6 @@
 DELETE FROM USER_ROLES;
 DELETE FROM DISHES;
-DELETE FROM HISTORY;
+DELETE FROM HISTORY_OF_VOTE;
 DELETE FROM USERS;
 DELETE FROM RESTAURANTS;
 
@@ -21,17 +21,16 @@ INSERT INTO RESTAURANTS (LABEL, RATING, NUMBER_OF_VOTERS)
            ('restaurant2', '3.0', '1'),
            ('restaurant3', '4.1', '3');
 
-INSERT INTO DISHES (RESTAURANT_ID, LABEL, PRICE)
-    VALUES ('100003', 'dish11', '500'),
-           ('100003', 'dish21', '100.43'),
-           ('100003', 'dish31', '100'),
-           ('100004', 'dish12', '200'),
-           ('100005', 'dish13', '10'),
-           ('100005', 'dish23', '160');
 
-INSERT INTO HISTORY (USER_ID, RESTAURANT_ID, GRADE)
+INSERT INTO HISTORY_OF_VOTE (USER_ID, RESTAURANT_ID, GRADE)
     VALUES ('100000', '100003',  '4'),
-           ('100001', '100004', '5'),
-           ('100002', '100005', '2');
+           ('100001', '100004', '5');
 
+INSERT INTO DISHES (RESTAURANT_ID, LABEL, PRICE)
+VALUES ('100003', 'dish11', '500'),
+       ('100003', 'dish21', '100.43'),
+       ('100003', 'dish31', '100'),
+       ('100004', 'dish12', '200'),
+       ('100005', 'dish13', '10'),
+       ('100005', 'dish23', '160');
 

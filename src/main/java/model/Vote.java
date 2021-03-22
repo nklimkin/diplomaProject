@@ -3,10 +3,13 @@ package model;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 @Entity
-@Table(name = "history")
+@Table(name = "history_of_vote")
 public class Vote extends BaseEntity{
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -14,9 +17,13 @@ public class Vote extends BaseEntity{
     @NotNull
     private User user;
 
-    @Column(name = "date_time")
+    @Column(name = "date")
     @NotNull
-    private LocalDateTime localDateTime;
+    private LocalDate localDate;
+
+    @Column(name = "time")
+    @NotNull
+    private LocalTime localTime;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
@@ -24,13 +31,14 @@ public class Vote extends BaseEntity{
     private Restaurant restaurant;
 
     @Column(name = "grade")
-    @NotBlank
+    @NotNull
     private int grade;
 
-    public Vote(Integer id, @NotNull User user, @NotNull LocalDateTime localDateTime, @NotNull Restaurant restaurant, @NotBlank int grade) {
+    public Vote(Integer id, @NotNull User user, @NotNull LocalDate localDate, @NotNull LocalTime localTime, @NotNull Restaurant restaurant, @NotBlank int grade) {
         super(id);
         this.user = user;
-        this.localDateTime = localDateTime;
+        this.localDate = localDate;
+        this.localTime = localTime;
         this.restaurant = restaurant;
         this.grade = grade;
     }
@@ -40,8 +48,24 @@ public class Vote extends BaseEntity{
     }
 
     public Vote(Vote vote) {
-        this(vote.getId(), vote.getUser(), vote.getLocalDateTime(),
+        this(vote.getId(), vote.getUser(), vote.getLocalDate(), vote.getLocalTime(),
                 vote.getRestaurant(), vote.getGrade());
+    }
+
+    public LocalDate getLocalDate() {
+        return localDate;
+    }
+
+    public void setLocalDate(LocalDate localDate) {
+        this.localDate = localDate;
+    }
+
+    public LocalTime getLocalTime() {
+        return localTime;
+    }
+
+    public void setLocalTime(LocalTime localTime) {
+        this.localTime = localTime;
     }
 
     public User getUser() {
@@ -50,14 +74,6 @@ public class Vote extends BaseEntity{
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public LocalDateTime getLocalDateTime() {
-        return localDateTime;
-    }
-
-    public void setLocalDateTime(LocalDateTime localDateTime) {
-        this.localDateTime = localDateTime;
     }
 
     public Restaurant getRestaurant() {
@@ -78,10 +94,9 @@ public class Vote extends BaseEntity{
 
     @Override
     public String toString() {
-        return "HistoryOfVote{" +
-                "user=" + user +
-                ", localDateTime=" + localDateTime +
-                ", restaurant=" + restaurant +
+        return "Vote{" +
+                "localDate=" + localDate +
+                ", localTime=" + localTime +
                 ", grade=" + grade +
                 '}';
     }

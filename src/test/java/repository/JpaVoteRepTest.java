@@ -1,5 +1,6 @@
 package repository;
 
+import model.Vote;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
+import testData.RestaurantTestData;
+import testData.UserTestData;
+import testData.VoteTestData;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,40 +25,39 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class JpaVoteRepTest {
 
     @Autowired
-    private JpaHistoryOfVoteRep rep;
+    private JpaVoteRep rep;
 
     @Test
     public void save() {
-        rep.save(HistoryOfVoteTestData.getNew(),
-                UserTestData.USER1,
-                RestaurantTestData.RESTAURANT_1);
-        assertThat(rep.get(HistoryOfVoteTestData.VOTE_NEW)).isEqualToIgnoringGivenFields(
-                HistoryOfVoteTestData.newVote,"restaurant", "user");
+        rep.save(VoteTestData.getNew(),
+                UserTestData.USER1, RestaurantTestData.RESTAURANT_1);
+        assertThat(rep.get(VoteTestData.VOTE_NEW)).isEqualToIgnoringGivenFields(
+                VoteTestData.newVote,"restaurant", "user");
     }
 
     @Test
     public void delete() {
-        rep.delete(HistoryOfVoteTestData.VOTE_1);
-        assertThat(rep.get(HistoryOfVoteTestData.VOTE_1)).isEqualTo(null);
+        rep.delete(VoteTestData.VOTE_1);
+        assertThat(rep.get(VoteTestData.VOTE_1)).isEqualTo(null);
     }
 
     @Test
     public void get() {
-        assertThat(rep.get(HistoryOfVoteTestData.VOTE_1)).isEqualToIgnoringGivenFields(HistoryOfVoteTestData.vote1,
+        assertThat(rep.get(VoteTestData.VOTE_1)).isEqualToIgnoringGivenFields(VoteTestData.vote1,
                 "restaurant", "user");
     }
 
     @Test
     public void getAll() {
         assertThat(rep.getAll()).usingElementComparatorIgnoringFields("restaurant", "user")
-                .containsExactlyInAnyOrder(HistoryOfVoteTestData.vote1,
-                        HistoryOfVoteTestData.vote2,
-                        HistoryOfVoteTestData.vote3);
+                .containsExactlyInAnyOrder(VoteTestData.vote1,
+                        VoteTestData.vote2);
     }
 
     @Test
-    public void getHistoryOfVoteByUserId() {
-        assertThat(rep.getHistoryOfVoteByUserId(UserTestData.USER2)).isEqualToIgnoringGivenFields(
-                HistoryOfVoteTestData.vote2, "restaurant", "user");
+    public void getAllVoteByRestaurant() {
+        assertThat(rep.getAllVoteByRestaurant(RestaurantTestData.RESTAURANT_1)).usingElementComparatorIgnoringFields(
+                "restaurant", "user").isEqualTo(List.of(VoteTestData.vote1,
+                VoteTestData.vote2));
     }
 }

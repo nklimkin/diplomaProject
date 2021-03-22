@@ -4,5 +4,6 @@
 
     <context:component-scan base-package="model"/>
     <context:component-scan base-package="controller"/>
+    <context:component-scan base-package="service"/>
 
 </beans>

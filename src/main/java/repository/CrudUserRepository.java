@@ -1,5 +1,6 @@
 package repository;
 
+import model.Status;
 import model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,7 +15,7 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM User u WHERE u.id=:id")
-    int delete(@Param("id") int id);
+    @Query("UPDATE User u SET u.status=:status WHERE u.id=:id")
+    int delete(@Param("id") int id, @Param("status")Status status);
 
 }

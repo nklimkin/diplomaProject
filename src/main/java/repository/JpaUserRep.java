@@ -1,5 +1,6 @@
 package repository;
 
+import model.Status;
 import model.User;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.data.domain.Sort;
@@ -44,6 +45,6 @@ public class JpaUserRep implements UserRepository{
 
     @Override
     public boolean delete(int id) {
-        return crudUserRepository.delete(id) != 0;
+        return crudUserRepository.delete(id, Status.DELETE) != 0;
     }
 }

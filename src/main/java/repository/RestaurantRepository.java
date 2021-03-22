@@ -17,4 +17,11 @@ public interface RestaurantRepository {
 
     List<Restaurant> getAll();
 
+    Restaurant getWithDishes(int id);
+
+    void updateRatingOfRestaurantNewVote(int id, int grade);
+
+    void updateRatingOfSameRestaurantByUpdatedVote(int restaurantId, double countTotalRating);
+
+    void updateRatingOfTwoRestaurantsByUpdatedVote(int idOfPastRestaurant, int idOfCurrentRestaurant, double newRatingOfPastRestaurant, double newRatingOfCurrentRestaurant);
 }

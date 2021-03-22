@@ -1,8 +1,5 @@
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import repository.JpaHistoryOfVoteRep;
-import repository.JpaUserRep;
-import repository.UserRepository;
-import repository.UserTestData;
+import repository.JpaVoteRep;
 
 import java.util.Arrays;
 
@@ -13,7 +10,7 @@ public class SpringMain {
                 "classpath:spring/spring-db.xml")) {
             System.out.println("Bean definition names: " + Arrays.toString(context.getBeanDefinitionNames()));
 
-            JpaHistoryOfVoteRep jpa = context.getBean(JpaHistoryOfVoteRep.class);
+            JpaVoteRep jpa = context.getBean(JpaVoteRep.class);
 
             jpa.getAll().forEach(System.out::println);
 

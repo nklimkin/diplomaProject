@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class Restaurant extends BaseEntity{
     @NotBlank
     private String label;
 
-    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     private List<Dish> menu;
 
     @Column(name = "rating")
@@ -27,19 +28,29 @@ public class Restaurant extends BaseEntity{
     @NotNull
     private int countOfVoters;
 
-    public Restaurant(Integer id, @NotBlank String label, List<Dish> menu, @NotBlank double rating, int countOfVoters) {
+    @Column(name = "date")
+    @NotNull
+    private LocalDate date;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private Status status;
+
+    public Restaurant(Integer id, @NotBlank String label, List<Dish> menu, @NotBlank double rating, int countOfVoters, LocalDate date, Status status) {
         super(id);
         this.label = label;
         this.menu = menu;
         this.rating = rating;
         this.countOfVoters = countOfVoters;
+        this.status = status;
+        this.date = date;
     }
 
     public Restaurant() {
     }
 
     public Restaurant(Restaurant r){
-        this(r.getId(), r.getLabel(), r.getMenu(), r.rating, r.countOfVoters);
+        this(r.getId(), r.getLabel(), r.getMenu(), r.rating, r.countOfVoters, r.date, r.status);
     }
 
 
@@ -49,6 +60,14 @@ public class Restaurant extends BaseEntity{
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public List<Dish> getMenu() {
@@ -80,12 +99,22 @@ public class Restaurant extends BaseEntity{
         this.countOfVoters = countOfVoters;
     }
 
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
         return "Restaurant{" +
                 "label='" + label + '\'' +
-                ", menu=" + menu +
                 ", rating=" + rating +
+                ", countOfVoters=" + countOfVoters +
+                ", date=" + date +
+                ", status=" + status +
                 '}';
     }
 }

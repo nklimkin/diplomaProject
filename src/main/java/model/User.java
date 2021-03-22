@@ -50,11 +50,15 @@ public class User extends BaseEntity{
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<UserRoles> roles;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private Status status;
+
     public User() {
     }
 
     public User(Integer id, @NotBlank String name, @NotBlank String surname, @NotBlank String email,
-                @NotBlank @Size(min = 6) String password, Date registered, Set<UserRoles> roles) {
+                @NotBlank @Size(min = 6) String password, Date registered, Status status, Set<UserRoles> roles) {
 
         super(id);
         this.name = name;
@@ -63,10 +67,11 @@ public class User extends BaseEntity{
         this.password = password;
         this.registered = registered;
         this.roles = roles;
+        this.status = status;
     }
 
     public User(Integer id, @NotBlank String name, @NotBlank String surname, @NotBlank String email,
-                @NotBlank @Size(min = 6) String password, UserRoles role, UserRoles... roles) {
+                @NotBlank @Size(min = 6) String password, Status status, UserRoles role, UserRoles... roles) {
         super(id);
         this.name = name;
         this.surname = surname;
@@ -74,23 +79,24 @@ public class User extends BaseEntity{
         this.password = password;
         this.roles = EnumSet.of(role, roles);
         this.registered = new Date(System.currentTimeMillis());
+        this.status = status;
     }
 
     public User(User u){
-        this(u.getId(), u.getName(), u.getSurname(), u.getEmail(), u.getPassword(), u.getRegistered()
-        , u.roles);
+        this(u.getId(), u.getName(), u.getSurname(), u.getEmail(), u.getPassword(), u.getRegistered(),
+                u.status, u.roles);
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + super.getId() +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", registered=" + registered +
                 ", roles=" + roles +
+                ", status=" + status +
                 '}';
     }
 
@@ -140,5 +146,13 @@ public class User extends BaseEntity{
 
     public void setRoles(Set<UserRoles> roles) {
         this.roles = roles;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

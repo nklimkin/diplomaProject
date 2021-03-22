@@ -2,10 +2,12 @@ package repository;
 
 import model.Dish;
 import model.Restaurant;
+import model.Status;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import util.RatingUtil;
 
 import java.util.Comparator;
 import java.util.List;
@@ -38,12 +40,48 @@ public class JpaRestaurantRep implements RestaurantRepository{
 
     @Override
     public boolean delete(int id) {
-        return crudRestaurantRepository.delete(id) != 0;
+        return crudRestaurantRepository.delete(id, Status.DELETE) != 0;
     }
 
     @Override
     public List<Restaurant> getAll() {
-        return crudRestaurantRepository.findAll(SORT_BY_RATING);
+        List<Restaurant> restaurants = crudRestaurantRepository.findAll(SORT_BY_RATING);
+        restaurants.forEach(rest -> rest.getMenu());
+        System.out.println(restaurants);
+        return restaurants;
+    }
+
+    @Override
+    public Restaurant getWithDishes(int id) {
+        Restaurant currentRestaurant = get(id);
+        currentRestaurant.getMenu();
+        return currentRestaurant;
+    }
+
+    @Transactional
+    @Override
+    public void updateRatingOfRestaurantNewVote(int id, int grade) {
+        Restaurant currentRestaurant = get(id);
+        currentRestaurant.setRating(RatingUtil.countNewRating(
+                currentRestaurant.getRating(), currentRestaurant.getCountOfVoters(), grade));
+        currentRestaurant.setCountOfVoters(currentRestaurant.getCountOfVoters() + 1);
+        save(currentRestaurant);
+    }
+
+    @Transactional
+    @Override
+    public void updateRatingOfSameRestaurantByUpdatedVote(int restaurantId, double countTotalRating) {
+        Restaurant currentRestaurant = get(restaurantId);
+        currentRestaurant.setRating(countTotalRating);
+        currentRestaurant.setCountOfVoters(currentRestaurant.getCountOfVoters() + 1);
+        save(currentRestaurant);
+    }
+
+    @Transactional
+    @Override
+    public void updateRatingOfTwoRestaurantsByUpdatedVote(int idOfPastRestaurant, int idOfCurrentRestaurant, double newRatingOfPastRestaurant, double newRatingOfCurrentRestaurant) {
+        updateRatingOfSameRestaurantByUpdatedVote(idOfPastRestaurant, newRatingOfPastRestaurant);
+        updateRatingOfSameRestaurantByUpdatedVote(idOfCurrentRestaurant, newRatingOfCurrentRestaurant);
     }
 
 }

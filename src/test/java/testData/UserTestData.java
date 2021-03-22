@@ -1,5 +1,6 @@
-package repository;
+package testData;
 
+import model.Status;
 import model.User;
 import model.UserRoles;
 
@@ -13,27 +14,27 @@ public class UserTestData {
     public static final int USER2 = 100001;
     public static final int ADMIN1 = 100002;
     public static final int NOT_FOUND = 1;
-    public static final int NEW = 100015;
+    public static final int NEW = 100014;
 
     public static User user1 = new User(100000, "user1", "user1_surName", "user1@email.ru",
-            "user1_pass", UserRoles.USER);
+            "user1_pass", Status.ACTIVE,  UserRoles.USER);
 
     public static User user2 = new User(100001, "user2", "user2_surName", "user2@email.ru",
-            "user2_pass", UserRoles.USER);
+            "user2_pass", Status.ACTIVE, UserRoles.USER);
 
     public static User admin1 = new User(100002, "admin1", "admin1_surName", "admin1@email.ru",
-            "admin1_pass", UserRoles.ADMIN);
+            "admin1_pass", Status.ACTIVE, UserRoles.ADMIN);
 
-    public static User newUser = new User(100015, "newUser", "newUser_surname", "newUser@email.ru", "newUser_pass",
+    public static User newUser = new User(100014, "newUser", "newUser_surname", "newUser@email.ru", "newUser_pass", Status.ACTIVE,
             UserRoles.USER);
 
-    public static User updated = new User(100000, "update", "update_surName", "updated@email.ru", "updUser_pass",
+    public static User updated = new User(100000, "update", "update_surName", "updated@email.ru", "updUser_pass", Status.ACTIVE,
             UserRoles.USER);
 
     public static List<User> users = List.of(user1, user2, admin1);
 
     public static User getNew(){
-        return new User(null, "newUser", "newUser_surname", "newUser@email.ru", "newUser_pass", UserRoles.USER);
+        return new User(null, "newUser", "newUser_surname", "newUser@email.ru", "newUser_pass", Status.ACTIVE, UserRoles.USER);
     }
 
     public static User getUpdated(){
