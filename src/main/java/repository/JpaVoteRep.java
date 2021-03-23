@@ -49,6 +49,11 @@ public class JpaVoteRep implements VoteRepository {
     }
 
     @Override
+    public List<Vote> getVotesWithUserAndRestaurant() {
+        return crudVoteRepository.getVotesWithUserAndRestaurant();
+    }
+
+    @Override
     public List<Vote> getAllVoteByRestaurant(int restaurantId) {
         return crudVoteRepository.getAllByRestaurant(restaurantId);
     }

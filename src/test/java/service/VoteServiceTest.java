@@ -4,6 +4,7 @@ import model.Vote;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -14,6 +15,7 @@ import testData.VoteTestData;
 import util.Exception.NotFoundException;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,6 +28,7 @@ import static testData.VoteTestData.*;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
+@ActiveProfiles("h2")
 public class VoteServiceTest {
 
     @Autowired
@@ -111,6 +114,16 @@ public class VoteServiceTest {
     public void getAllVoteByRestaurantAndLocalDate() {
         assertThat(voteService.getAllVoteByRestaurantAndLocalDate(RestaurantTestData.RESTAURANT_1, LocalDate.MAX))
                 .isEmpty();
+    }
+
+    @Test
+    public void getVotesWithUserAndRestaurant() {
+        List<Vote> votes = voteService.getVotesWithUserAndRestaurant();
+        votes.forEach(vote -> System.out.println(vote + " " + vote.getUser() + " " + vote.getRestaurant()));
+        assertThat(votes)
+                .usingElementComparatorIgnoringFields(fieldToIgnore)
+                .containsExactlyInAnyOrder(vote1, vote2);
+
     }
 
 }

@@ -53,9 +53,7 @@ public class JpaRestaurantRep implements RestaurantRepository{
 
     @Override
     public Restaurant getWithDishes(int id) {
-        Restaurant currentRestaurant = get(id);
-        currentRestaurant.getMenu();
-        return currentRestaurant;
+        return crudRestaurantRepository.getRestaurantById(id);
     }
 
     @Transactional

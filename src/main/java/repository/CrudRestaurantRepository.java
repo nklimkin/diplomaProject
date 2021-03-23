@@ -23,6 +23,6 @@ public interface CrudRestaurantRepository extends JpaRepository<Restaurant, Inte
     @Query("SELECT r FROM Restaurant r ORDER BY r.rating DESC")
     Restaurant getAllOrderByRating();
 
-    @Query("SELECT r FROM Restaurant r WHERE r.id=:id")
-    Restaurant getWithDishes(@Param("id") int id);
+    @EntityGraph(attributePaths = {"menu"})
+    Restaurant getRestaurantById(int id);
 }

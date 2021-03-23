@@ -1,6 +1,7 @@
 package repository;
 
 import model.Vote;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -28,5 +29,9 @@ public interface CrudVoteRepository extends JpaRepository<Vote, Integer> {
                                                   @Param("localDate") LocalDate localDate);
 
     Vote getVoteByUserIdAndLocalDate(int userId, LocalDate localDate);
+
+    @EntityGraph(value = "voteWithUserAndRestaurant")
+    @Query("SELECT v FROM Vote v")
+    List<Vote> getVotesWithUserAndRestaurant();
 
 }

@@ -1,5 +1,7 @@
 package model;
 
+import org.springframework.data.jpa.repository.EntityGraph;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -8,7 +10,12 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+
 @Entity
+@NamedEntityGraph(name = "voteWithUserAndRestaurant",
+        attributeNodes = {@NamedAttributeNode(value = "restaurant"),
+            @NamedAttributeNode(value = "user", subgraph = "user.roles")},
+        subgraphs = @NamedSubgraph(name = "user.roles", attributeNodes = @NamedAttributeNode(value = "roles")))
 @Table(name = "history_of_vote")
 public class Vote extends BaseEntity{
 
