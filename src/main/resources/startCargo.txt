@@ -1,0 +1,1 @@
+ mvn clean package -DskipTests=true org.codehaus.cargo:cargo-maven3-plugin:1.9.2:run
