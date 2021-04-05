@@ -47,4 +47,8 @@ public class RestaurantService {
         return jpaRestaurantRep.getWithDishes(id);
     }
 
+    public void delete(int id) {
+        ValidationUtil.checkNotFoundWithId(jpaRestaurantRep.delete(id), id);
+    }
+
 }
