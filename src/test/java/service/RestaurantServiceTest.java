@@ -1,8 +1,7 @@
 package service;
 
 import model.Restaurant;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -10,21 +9,19 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import testData.RestaurantTestData;
 import testData.UserTestData;
 import testData.VoteTestData;
 
-import static org.junit.Assert.*;
-
 import static testData.RestaurantTestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ContextConfiguration({
+@SpringJUnitConfig(locations = {
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
-@RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles("h2")
 public class RestaurantServiceTest {

@@ -18,9 +18,9 @@ import java.util.List;
 @RequestMapping(value = RestaurantController.URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantController {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(RestaurantController.class);
 
-    public static final String URL = "api/restaurants";
+    public static final String URL = "/api/restaurants";
 
     private RestaurantService service;
 

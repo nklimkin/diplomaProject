@@ -1,35 +1,60 @@
 package controller;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import model.Restaurant;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import service.RestaurantService;
+import util.json.JsonUtil;
 
-import static org.junit.Assert.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static testData.RestaurantTestData.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@ContextConfiguration({
-        "classpath:spring/spring-app.xml",
-        "classpath:spring/spring-db.xml"
-})
-@RunWith(SpringRunner.class)
-@Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@ActiveProfiles("h2")
-public class RestaurantControllerTest {
+public class RestaurantControllerTest extends AbstractControllerTest {
 
     @Autowired
-    private RestaurantController controller;
+    private RestaurantService service;
+
+    private static final String REST_URL = RestaurantController.URL + "/";
+
+    private static final String[] fieldsToIgnore = new String[]{"menu", "date"};
 
     @Test
-    public void save() {
+    public void save() throws Exception {
+        Restaurant restaurant = getNew();
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(JsonUtil.writeValue(restaurant)))
+                    .andDo(print());
 
+        Restaurant created = JsonUtil.readValueFromJson(action, Restaurant.class);
+        int id = created.getId();
+        restaurant.setId(id);
+
+        assertThat(created).usingRecursiveComparison()
+                .ignoringFields(fieldsToIgnore)
+                .isEqualTo(restaurant);
+
+        assertThat(restaurant).usingRecursiveComparison()
+                .ignoringFields(fieldsToIgnore)
+                .isEqualTo(service.get(id));
     }
 
     @Test
-    public void update() {
+    public void update() throws Exception {
+        Restaurant updated = getUpdated();
+        perform(MockMvcRequestBuilders.put(REST_URL)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(JsonUtil.writeValue(updated))).andExpect(status().isNoContent()).andDo(print());
+
+        assertThat(service.get(updated.getId())).usingRecursiveComparison()
+                .ignoringFields(fieldsToIgnore)
+                .isEqualTo(updated);
     }
 
     @Test
