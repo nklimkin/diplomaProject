@@ -39,11 +39,11 @@ public class RestaurantController {
         return ResponseEntity.created(uriOfNewResources).body(res);
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Restaurant restaurant) {
+    public void update(@RequestBody Restaurant restaurant, @PathVariable int id) {
         log.info("get with restaurant {}", restaurant);
-        service.update(restaurant);
+        service.update(restaurant, id);
     }
 
     @DeleteMapping("/{id}")

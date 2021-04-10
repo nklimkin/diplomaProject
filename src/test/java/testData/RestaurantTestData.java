@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class RestaurantTestData {
-
     public static final int RESTAURANT_1 = 100003;
     public static final int RESTAURANT_2 = 100004;
     public static final int RESTAURANT_3 = 100005;

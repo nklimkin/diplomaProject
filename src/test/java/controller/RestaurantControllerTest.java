@@ -1,14 +1,17 @@
 package controller;
 
 import model.Restaurant;
+import model.Status;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import service.RestaurantService;
+import util.TestMatcher;
 import util.json.JsonUtil;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,7 +35,7 @@ public class RestaurantControllerTest extends AbstractControllerTest {
                     .content(JsonUtil.writeValue(restaurant)))
                     .andDo(print());
 
-        Restaurant created = JsonUtil.readValueFromJson(action, Restaurant.class);
+        Restaurant created = JsonUtil.readValueFromJsonResultActions(action, Restaurant.class);
         int id = created.getId();
         restaurant.setId(id);
 
@@ -48,7 +51,7 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     public void update() throws Exception {
         Restaurant updated = getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL)
+        perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT_1)
         .contentType(MediaType.APPLICATION_JSON)
         .content(JsonUtil.writeValue(updated))).andExpect(status().isNoContent()).andDo(print());
 
@@ -58,22 +61,43 @@ public class RestaurantControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void delete() {
+    public void delete() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + RESTAURANT_1)).andExpect(status().isNoContent())
+        .andDo(print());
+        assertThat(service.get(RESTAURANT_1).getStatus()).isEqualTo(Status.DELETE);
     }
 
     @Test
-    public void get() {
+    public void get() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT_1))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(TestMatcher.contentJson(restaurant1, fieldsToIgnore, Restaurant.class));
     }
 
     @Test
-    public void getAll() {
+    public void getAll() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(TestMatcher.contentJson(restaurants, fieldsToIgnore, Restaurant.class));
     }
 
     @Test
-    public void getBestOne() {
+    public void getBestOne() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "best"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(TestMatcher.contentJson(restaurant3, fieldsToIgnore, Restaurant.class));
     }
 
     @Test
-    public void getWithMenu() {
+    public void getWithMenu() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "with-dishes/" + RESTAURANT_1))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(TestMatcher.contentJson(restaurant1, new String[]{"date"}, Restaurant.class));
+
     }
 }

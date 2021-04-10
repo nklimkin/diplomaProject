@@ -41,7 +41,7 @@ public class RestaurantServiceTest {
 
     @Test
     public void update() {
-        service.update(RestaurantTestData.getUpdated());
+        service.update(RestaurantTestData.getUpdated(), RestaurantTestData.getUpdated().getId());
         assertThat(service.get(RESTAURANT_1)).usingRecursiveComparison()
                 .ignoringFields(fieldsToIgnore)
                 .isEqualTo(updatedRestaurant);

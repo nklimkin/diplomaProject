@@ -26,8 +26,9 @@ public class RestaurantService {
         return jpaRestaurantRep.save(restaurant);
     }
 
-    public void update(Restaurant restaurant){
+    public void update(Restaurant restaurant, int id){
         ValidationUtil.checkUpdated(restaurant);
+        ValidationUtil.assureIdConsistent(restaurant, id);
         jpaRestaurantRep.save(restaurant);
     }
 
