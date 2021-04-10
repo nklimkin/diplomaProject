@@ -25,8 +25,9 @@ public class UserService {
         ValidationUtil.checkNotFoundWithId(rep.delete(id), id);
     }
 
-    public void update(User user) {
+    public void update(User user, int id) {
         ValidationUtil.checkUpdated(user);
+        ValidationUtil.assureIdConsistent(user, id);
         rep.save(user);
     }
 

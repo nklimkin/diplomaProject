@@ -31,7 +31,7 @@ public class UserTestData {
     public static User updated = new User(100000, "update", "update_surName", "updated@email.ru", "updUser_pass", Status.ACTIVE,
             UserRoles.USER);
 
-    public static List<User> users = List.of(user1, user2, admin1);
+    public static List<User> users = List.of(admin1, user1, user2);
 
     public static User getNew(){
         return new User(null, "newUser", "newUser_surname", "newUser@email.ru", "newUser_pass", Status.ACTIVE, UserRoles.USER);
