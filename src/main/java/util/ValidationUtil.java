@@ -1,7 +1,9 @@
 package util;
 
 import model.BaseEntity;
+import model.User;
 import model.Vote;
+import org.springframework.util.Assert;
 import util.Exception.NotFoundException;
 import util.Exception.TimeForVoteException;
 
@@ -54,5 +56,16 @@ public class ValidationUtil {
         if (!vote.getLocalDate().equals(LocalDate.now())) {
             throw  new TimeForVoteException("you can change you vote only before 11:00 AM and only on the same day!");
         }
+    }
+
+    public static void assureIdConsistent(BaseEntity b, int id) {
+        if (b.getId() != id)
+            throw new IllegalArgumentException("user must be with id = " + id);
+    }
+
+    public static void checkPossibilityOfUpdateVote(Vote vote, int userId) {
+        Assert.notNull(vote.getUser().getId(), "user of vote must not have id=null");
+        if (vote.getUser().getId() != userId)
+            throw new IllegalArgumentException("you cant change foreign vote");
     }
 }

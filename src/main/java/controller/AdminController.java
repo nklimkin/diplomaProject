@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = AdminController.URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class AdminController {
+public class AdminController extends AbstractUserController{
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -28,24 +28,24 @@ public class AdminController {
         this.service = service;
     }
 
+    @Override
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody User user, @PathVariable int id) {
-        log.info("update user {} with id={}", user, id);
-        service.update(user, id);
+        super.update(user, id);
     }
 
+    @Override
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
-        log.info("delete user with id={}", id);
-        service.delete(id);
+        super.delete(id);
     }
 
+    @Override
     @GetMapping(value = "/{id}")
     public User get(@PathVariable int id) {
-        log.info("get user with id={}", id);
-        return service.get(id);
+        return super.get(id);
     }
 
     @GetMapping(value = "/by")

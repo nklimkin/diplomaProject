@@ -12,9 +12,7 @@ import util.SecurityUtil;
 
 @RestController
 @RequestMapping(value = ProfileController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class ProfileController {
-
-    private final Logger log = LoggerFactory.getLogger(getClass());
+public class ProfileController extends AbstractUserController{
 
     public static final String REST_URL = "/api/profiles";
 
@@ -28,20 +26,17 @@ public class ProfileController {
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody User user) {
-        log.info("update user with id={}", SecurityUtil.authUserId());
-        service.update(user, SecurityUtil.authUserId());
+        super.update(user, SecurityUtil.authUserId());
     }
 
     @GetMapping
     public User get() {
-        log.info("get user with id={}", SecurityUtil.authUserId());
-        return service.get(SecurityUtil.authUserId());
+        return super.get(SecurityUtil.authUserId());
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete() {
-        log.info("delete user with id={}", SecurityUtil.authUserId());
-        service.delete(SecurityUtil.authUserId());
+        super.delete(SecurityUtil.authUserId());
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.util.Assert;
 import repository.RestaurantRepository;
 import repository.VoteRepository;
 import util.RatingUtil;
+import util.ValidationUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,6 +34,7 @@ public class VoteService {
     public void update(Vote vote, int userId, int idOfPastRestaurantForVote) {
         checkUpdated(vote);
 //        checkTimeForUpdateVote(vote);
+        checkPossibilityOfUpdateVote(vote, userId);
         Assert.notNull(vote.getRestaurant(), "restaurant must not be null");
         Assert.notNull(vote.getRestaurant().getId(), "id of restaurant must not be null");
         Restaurant newRestaurantForVote = vote.getRestaurant();

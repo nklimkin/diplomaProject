@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = AdminVoteController.URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class AdminVoteController {
+public class AdminVoteController extends AbstractVoteController{
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -50,19 +50,13 @@ public class AdminVoteController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody Vote vote, @PathVariable int id) {
-        log.info("update vote with id={}", id);
-        User userOfVote = vote.getUser();
-        Restaurant restaurantOfVote = vote.getRestaurant();
-        Assert.notNull(userOfVote.getId(), "user must not have id = null");
-        Assert.notNull(restaurantOfVote.getId(), "restaurant must not have id = null");
-        service.update(vote, userOfVote.getId(), restaurantOfVote.getId());
+        super.update(vote, id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
-        log.info("delete vote with id={}", id);
-        service.delete(id);
+        super.delete(id);
     }
 
     @GetMapping()
@@ -95,7 +89,7 @@ public class AdminVoteController {
         return service.getAllTodayVoteByRestaurant(restaurantId);
     }
 
-    @GetMapping("/by")
+    @GetMapping("/byj")
     public List<Vote> getByRestaurantAndDate(@RequestParam int restaurantId, @RequestParam LocalDate date) {
         log.info("get vote by restaurant id = {} and date = {}", restaurantId, date);
         return service.getAllVoteByRestaurantAndLocalDate(restaurantId, date);
