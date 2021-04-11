@@ -13,6 +13,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.VoteService;
+import util.SecurityUtil;
 
 import java.net.URI;
 
@@ -23,11 +24,11 @@ public abstract class AbstractVoteController {
     @Autowired
     private VoteService service;
 
-    public void update(Vote vote, int userId) {
-        log.info("update vote {} with userId={}", vote, userId);
+    public void update(Vote vote, int id) {
+        log.info("update vote {} with id={}", vote, id);
         Restaurant restaurantOfVote = vote.getRestaurant();
         Assert.notNull(restaurantOfVote.getId(), "restaurant must not have id = null");
-        service.update(vote, userId, restaurantOfVote.getId());
+        service.update(vote, SecurityUtil.authUserId(), restaurantOfVote.getId());
     }
 
     public void delete(int id) {
@@ -35,10 +36,14 @@ public abstract class AbstractVoteController {
         service.delete(id);
     }
 
+    public Vote save(Vote vote) {
+        log.info("create vote {} ", vote);
+        return service.create(vote, SecurityUtil.authUserId());
+    }
+
     public Vote get(int id) {
         log.info("get vote with id={}", id);
         return service.get(id);
     }
-
 
 }

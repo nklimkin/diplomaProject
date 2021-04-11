@@ -40,7 +40,7 @@ public class VoteServiceTest {
 
     @Test
     public void create() {
-        voteService.create(getNew(), UserTestData.ADMIN1, RestaurantTestData.RESTAURANT_1);
+        voteService.create(getNew(), UserTestData.ADMIN1);
         assertThat(voteService.get(VOTE_NEW)).usingRecursiveComparison()
                 .ignoringFields(fieldToIgnore)
                 .isEqualTo(newVote);

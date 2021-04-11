@@ -13,6 +13,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.VoteService;
+import util.SecurityUtil;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -34,13 +35,8 @@ public class AdminVoteController extends AbstractVoteController{
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Vote> save(@RequestBody Vote vote) {
-        log.info("create vote {} ", vote);
-        User userOfVote = vote.getUser();
-        Restaurant restaurantOfVote = vote.getRestaurant();
-        Assert.notNull(userOfVote.getId(), "user must not have id = null");
-        Assert.notNull(restaurantOfVote.getId(), "restaurant must not have id = null");
-        Vote v = service.create(vote, userOfVote.getId(), restaurantOfVote.getId());
+    public ResponseEntity<Vote> saveWithLocation(@RequestBody Vote vote) {
+        Vote v = super.save(vote);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(URL + "/{id}")
                 .buildAndExpand(v.getId()).toUri();
@@ -73,25 +69,6 @@ public class AdminVoteController extends AbstractVoteController{
 
     @GetMapping("/{id}")
     public Vote get(@PathVariable int id) {
-        log.info("get vote with id={}", id);
-        return service.get(id);
-    }
-
-    @GetMapping("/by")
-    public List<Vote> getByRestaurant(@RequestParam int restaurantId) {
-        log.info("get votes by restaurant with id={}", restaurantId);
-        return service.getAllVoteByRestaurant(restaurantId);
-    }
-
-    @GetMapping("today/by")
-    public List<Vote> getTodayByRestaurant(@RequestParam int restaurantId) {
-        log.info("get today votes by restaurant with id={}", restaurantId);
-        return service.getAllTodayVoteByRestaurant(restaurantId);
-    }
-
-    @GetMapping("/byj")
-    public List<Vote> getByRestaurantAndDate(@RequestParam int restaurantId, @RequestParam LocalDate date) {
-        log.info("get vote by restaurant id = {} and date = {}", restaurantId, date);
-        return service.getAllVoteByRestaurantAndLocalDate(restaurantId, date);
+        return super.get(id);
     }
 }

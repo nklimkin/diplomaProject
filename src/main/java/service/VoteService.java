@@ -25,8 +25,10 @@ public class VoteService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public Vote create(Vote vote, int userId, int restaurantId) {
+    public Vote create(Vote vote, int userId) {
         checkNew(vote);
+        Assert.notNull(vote.getRestaurant().getId(), "id of restaurant of vote must not be null");
+        int restaurantId = vote.getRestaurant().getId();
         restaurantRepository.updateRatingOfRestaurantNewVote(restaurantId, vote.getGrade());
         return voteRepository.save(vote, userId, restaurantId);
     }
@@ -87,5 +89,9 @@ public class VoteService {
 
     public List<Vote> getAllVoteByRestaurantAndLocalDate(int restaurantId, LocalDate localDate) {
         return voteRepository.getAllVoteByRestaurantAndLocalDate(restaurantId, localDate);
+    }
+
+    public Vote getTodayByUser(int userId) {
+        return checkNotFountWithSomeAttribute(voteRepository.getTodayVoteByUserId(userId), userId);
     }
 }
