@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.VoteService;
@@ -19,8 +20,6 @@ import java.security.Security;
 @RequestMapping(value = ProfileVoteController.URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProfileVoteController extends AbstractVoteController{
 
-    private Logger log = LoggerFactory.getLogger(getClass());
-
     public static final String URL = "/api/votes";
 
     private VoteService service;
@@ -32,18 +31,20 @@ public class ProfileVoteController extends AbstractVoteController{
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update() {
-        Vote updated = service.getTodayByUser(SecurityUtil.authUserId());
-        super.update(updated, updated.getId());
+    public void update(@RequestBody Vote vote) {
+        Assert.notNull(vote.getId(), "vote id cant have be null");
+        super.update(vote, vote.getId());
     }
 
     @GetMapping
     public Vote get() {
-        return super.get(SecurityUtil.authUserId());
+        Vote todayVote = service.getTodayByUser(SecurityUtil.authUserId());
+        Assert.notNull(todayVote.getId(), "id of vote cant be null");
+        return super.get(todayVote.getId());
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Vote> createWithLocation(Vote vote) {
+    public ResponseEntity<Vote> createWithLocation(@RequestBody Vote vote) {
         Vote v = super.save(vote);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(URL + "/{id}")
@@ -54,7 +55,9 @@ public class ProfileVoteController extends AbstractVoteController{
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete() {
-        super.delete(SecurityUtil.authUserId());
+        Vote todayVote = service.getTodayByUser(SecurityUtil.authUserId());
+        Assert.notNull(todayVote.getId(), "id of vote cant be null");
+        super.delete(todayVote.getId());
     }
 
 

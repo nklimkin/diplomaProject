@@ -54,6 +54,9 @@ public class User extends BaseEntity{
     @Column(name = "status", nullable = false)
     private Status status;
 
+    @Column(name = "enabled", nullable = false, columnDefinition = "bool default true")
+    private boolean enabled = true;
+
     public User() {
     }
 
@@ -68,6 +71,14 @@ public class User extends BaseEntity{
         this.registered = registered;
         this.roles = roles;
         this.status = status;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public User(Integer id, @NotBlank String name, @NotBlank String surname, @NotBlank String email,

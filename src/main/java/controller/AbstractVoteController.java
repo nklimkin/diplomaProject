@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.VoteService;
 import util.SecurityUtil;
+import util.ValidationUtil;
 
 import java.net.URI;
 
@@ -26,6 +27,7 @@ public abstract class AbstractVoteController {
 
     public void update(Vote vote, int id) {
         log.info("update vote {} with id={}", vote, id);
+        ValidationUtil.assureIdConsistent(vote, id);
         Restaurant restaurantOfVote = vote.getRestaurant();
         Assert.notNull(restaurantOfVote.getId(), "restaurant must not have id = null");
         service.update(vote, SecurityUtil.authUserId(), restaurantOfVote.getId());

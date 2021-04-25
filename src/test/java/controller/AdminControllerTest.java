@@ -8,12 +8,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import service.UserService;
 import util.TestMatcher;
-import util.json.JsonUtil;
+import util.JsonUtil;
+import util.SecurityUtil;
+import util.TestSecurityUtil;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static testData.UserTestData.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,6 +29,7 @@ class AdminControllerTest extends AbstractControllerTest{
     @Test
     void update() throws Exception {
         perform(MockMvcRequestBuilders.put(REST_URL + USER1)
+                .with(TestSecurityUtil.userHttpBasic(user1))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getUpdated())))
                 .andExpect(status().isNoContent())
@@ -41,7 +42,8 @@ class AdminControllerTest extends AbstractControllerTest{
 
     @Test
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL + USER1))
+        perform(MockMvcRequestBuilders.delete(REST_URL + USER1)
+                .with(TestSecurityUtil.userHttpBasic(user1)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
 

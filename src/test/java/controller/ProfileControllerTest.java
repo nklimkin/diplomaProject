@@ -8,13 +8,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import service.UserService;
 import util.TestMatcher;
-import util.json.JsonUtil;
+import util.JsonUtil;
 
-import static org.assertj.core.api.Assertions.as;
-import static org.junit.jupiter.api.Assertions.*;
 import static testData.UserTestData.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.assertj.core.api.Assertions.assertThat;
 

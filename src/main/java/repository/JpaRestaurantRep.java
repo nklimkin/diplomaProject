@@ -46,7 +46,6 @@ public class JpaRestaurantRep implements RestaurantRepository{
     @Override
     public List<Restaurant> getAll() {
         List<Restaurant> restaurants = crudRestaurantRepository.findAll(SORT_BY_RATING);
-        restaurants.forEach(rest -> rest.getMenu());
         System.out.println(restaurants);
         return restaurants;
     }
@@ -60,9 +59,11 @@ public class JpaRestaurantRep implements RestaurantRepository{
     @Override
     public void updateRatingOfRestaurantNewVote(int id, int grade) {
         Restaurant currentRestaurant = get(id);
+
         currentRestaurant.setRating(RatingUtil.countNewRating(
                 currentRestaurant.getRating(), currentRestaurant.getCountOfVoters(), grade));
         currentRestaurant.setCountOfVoters(currentRestaurant.getCountOfVoters() + 1);
+
         save(currentRestaurant);
     }
 

@@ -9,9 +9,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import service.VoteService;
 import testData.UserTestData;
 import util.Exception.NotFoundException;
-import util.SecurityUtil;
 import util.TestMatcher;
-import util.json.JsonUtil;
+import util.JsonUtil;
+import util.SecurityUtil;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import service.RestaurantService;
 import util.TestMatcher;
-import util.json.JsonUtil;
+import util.JsonUtil;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -18,12 +18,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static testData.RestaurantTestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RestaurantControllerTest extends AbstractControllerTest {
+public class RestaurantAdminControllerTest extends AbstractControllerTest {
 
     @Autowired
     private RestaurantService service;
 
-    private static final String REST_URL = RestaurantController.URL + "/";
+    private static final String REST_URL = RestaurantAdminController.URL + "/";
 
     private static final String[] fieldsToIgnore = new String[]{"menu", "date"};
 

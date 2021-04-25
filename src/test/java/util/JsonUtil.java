@@ -1,9 +1,10 @@
-package util.json;
+package util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectReader;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import util.json.MyObjectMapper;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

@@ -1,7 +1,6 @@
 package util;
 
 import org.springframework.test.web.servlet.ResultMatcher;
-import util.json.JsonUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

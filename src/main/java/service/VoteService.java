@@ -40,16 +40,19 @@ public class VoteService {
         Assert.notNull(vote.getRestaurant(), "restaurant must not be null");
         Assert.notNull(vote.getRestaurant().getId(), "id of restaurant must not be null");
         Restaurant newRestaurantForVote = vote.getRestaurant();
+        int idOfNewRestaurantForVote = newRestaurantForVote.getId();
         voteRepository.save(vote, userId, newRestaurantForVote.getId());
 
-        if (newRestaurantForVote.getId() == idOfPastRestaurantForVote) {
-            restaurantRepository.updateRatingOfSameRestaurantByUpdatedVote(newRestaurantForVote.getId(),
-                    RatingUtil.countTotalRating(getAllTodayVoteByRestaurant(newRestaurantForVote.getId())));
+        if (idOfNewRestaurantForVote == idOfPastRestaurantForVote) {
+            double newRatingOfRestaurant = RatingUtil.countTotalRating(getAllTodayVoteByRestaurant(idOfNewRestaurantForVote));
+            restaurantRepository.updateRatingOfSameRestaurantByUpdatedVote(
+                    newRestaurantForVote.getId(),
+                    newRatingOfRestaurant);
         } else {
             double newRatingOfLastRestaurant = RatingUtil.countTotalRating(getAllTodayVoteByRestaurant(idOfPastRestaurantForVote));
-            double newRatingOfCurrentRestaurant = RatingUtil.countTotalRating(getAllTodayVoteByRestaurant(newRestaurantForVote.getId()));
+            double newRatingOfNewRestaurant = RatingUtil.countTotalRating(getAllTodayVoteByRestaurant(idOfNewRestaurantForVote));
             restaurantRepository.updateRatingOfTwoRestaurantsByUpdatedVote(idOfPastRestaurantForVote,
-                    newRestaurantForVote.getId(), newRatingOfLastRestaurant, newRatingOfCurrentRestaurant);
+                    idOfNewRestaurantForVote, newRatingOfLastRestaurant, newRatingOfNewRestaurant);
         }
     }
 

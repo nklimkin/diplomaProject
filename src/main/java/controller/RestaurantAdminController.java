@@ -15,17 +15,17 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = RestaurantController.URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public class RestaurantController {
+@RequestMapping(value = RestaurantAdminController.URL, produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestaurantAdminController {
 
-    private final Logger log = LoggerFactory.getLogger(RestaurantController.class);
+    private final Logger log = LoggerFactory.getLogger(RestaurantAdminController.class);
 
-    public static final String URL = "/api/restaurants";
+    public static final String URL = "/api/admin/restaurants";
 
     private RestaurantService service;
 
     @Autowired
-    public RestaurantController(RestaurantService service) {
+    public RestaurantAdminController(RestaurantService service) {
         this.service = service;
     }
 
