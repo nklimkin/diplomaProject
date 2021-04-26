@@ -1,5 +1,6 @@
 package controller;
 
+import authorized.AuthorizedUser;
 import model.Vote;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -31,9 +33,9 @@ public class ProfileVoteController extends AbstractVoteController{
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Vote vote) {
+    public void update(@RequestBody Vote vote, @AuthenticationPrincipal AuthorizedUser authorizedUser) {
         Assert.notNull(vote.getId(), "vote id cant have be null");
-        super.update(vote, vote.getId());
+        super.update(vote, vote.getId(), authorizedUser.getId());
     }
 
     @GetMapping

@@ -25,7 +25,7 @@ public class UserTestData {
     public static User admin1 = new User(100002, "admin1", "admin1_surName", "admin1@email.ru",
             "admin1_pass", Status.ACTIVE, UserRoles.ADMIN);
 
-    public static User newUser = new User(100014, "newUser", "newUser_surname", "newUser@email.ru", "newUser_pass", Status.ACTIVE,
+    public static User newUser = new User(100014, "newUser", "newUser_surname", "newuser@email.ru", "newUser_pass", Status.ACTIVE,
             UserRoles.USER);
 
     public static User updated = new User(100000, "update", "update_surName", "updated@email.ru", "updUser_pass", Status.ACTIVE,
@@ -34,7 +34,7 @@ public class UserTestData {
     public static List<User> users = List.of(admin1, user1, user2);
 
     public static User getNew(){
-        return new User(null, "newUser", "newUser_surname", "newUser@email.ru", "newUser_pass", Status.ACTIVE, UserRoles.USER);
+        return new User(null, "newUser", "newUser_surname", "newuser@email.ru", "newUser_pass", Status.ACTIVE, UserRoles.USER);
     }
 
     public static User getUpdated(){

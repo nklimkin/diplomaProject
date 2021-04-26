@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import repository.UserRepository;
+import to.UserTo;
+import util.UserUtil;
 import util.ValidationUtil;
 import authorized.AuthorizedUser;
 
@@ -40,6 +42,13 @@ public class UserService implements UserDetailsService {
         ValidationUtil.checkUpdated(user);
         ValidationUtil.assureIdConsistent(user, id);
         prepareAndSave(user);
+    }
+
+    public void update(UserTo userTo, int id) {
+        ValidationUtil.checkUpdated(userTo);
+        ValidationUtil.assureIdConsistent(userTo, id);
+        User user = get(userTo.getId());
+        prepareAndSave(UserUtil.updateFromTo(user, userTo));
     }
 
     private User prepareAndSave(User user) {

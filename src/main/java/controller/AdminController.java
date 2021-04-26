@@ -6,11 +6,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.UserService;
+import to.UserTo;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -28,11 +32,21 @@ public class AdminController extends AbstractUserController{
         this.service = service;
     }
 
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<User> createWithLocation(@RequestBody UserTo userTo) {
+        User creatingUser = super.create(userTo);
+        URI uri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(URL + "/{id}")
+                .buildAndExpand(creatingUser.getId()).toUri();
+        return ResponseEntity.created(uri).body(creatingUser);
+    }
+
     @Override
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody User user, @PathVariable int id) {
-        super.update(user, id);
+    public void update(@RequestBody UserTo userTo, @PathVariable int id) {
+        super.update(userTo, id);
     }
 
     @Override

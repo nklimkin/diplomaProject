@@ -25,12 +25,12 @@ public abstract class AbstractVoteController {
     @Autowired
     private VoteService service;
 
-    public void update(Vote vote, int id) {
-        log.info("update vote {} with id={}", vote, id);
-        ValidationUtil.assureIdConsistent(vote, id);
+    public void update(Vote vote, int voteId, int userId) {
+        log.info("update vote {} with id={}", vote, voteId);
+        ValidationUtil.assureIdConsistent(vote, voteId);
         Restaurant restaurantOfVote = vote.getRestaurant();
         Assert.notNull(restaurantOfVote.getId(), "restaurant must not have id = null");
-        service.update(vote, SecurityUtil.authUserId(), restaurantOfVote.getId());
+        service.update(vote, userId, restaurantOfVote.getId());
     }
 
     public void delete(int id) {

@@ -12,6 +12,7 @@ import util.Exception.NotFoundException;
 import util.TestMatcher;
 import util.JsonUtil;
 import util.SecurityUtil;
+import util.TestSecurityUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,8 +32,8 @@ class ProfileVoteControllerTest extends AbstractControllerTest{
 
     @Test
     void update() throws Exception {
-        SecurityUtil.setAuthUserId(UserTestData.ADMIN1);
         perform(MockMvcRequestBuilders.put(REST_URL)
+                .with(TestSecurityUtil.userHttpBasic(UserTestData.admin1))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getUpdatedDontChangeRestaurant())))
                 .andExpect(status().isNoContent())
@@ -41,8 +42,6 @@ class ProfileVoteControllerTest extends AbstractControllerTest{
         assertThat(service.get(VOTE_1)).usingRecursiveComparison()
                 .ignoringFields(fieldToIgnore)
                 .isEqualTo(updatedVoteWithoutChangingRestaurant);
-
-        SecurityUtil.setAuthUserId(UserTestData.USER1);
 
     }
 

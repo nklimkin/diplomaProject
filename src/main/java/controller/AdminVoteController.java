@@ -46,7 +46,7 @@ public class AdminVoteController extends AbstractVoteController{
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@RequestBody Vote vote, @PathVariable int id) {
-        super.update(vote, id);
+        super.update(vote, id, vote.getUser().getId());
     }
 
     @DeleteMapping("/{id}")

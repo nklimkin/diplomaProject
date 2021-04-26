@@ -12,6 +12,7 @@ import util.Exception.NotFoundException;
 import util.TestMatcher;
 import util.JsonUtil;
 import util.SecurityUtil;
+import util.TestSecurityUtil;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -34,6 +35,7 @@ class AdminVoteControllerTest extends AbstractControllerTest{
 
         Vote vote = getNew();
         ResultActions actions = perform(MockMvcRequestBuilders.post(REST_URL)
+            .with(TestSecurityUtil.userHttpBasic(UserTestData.admin1))
             .contentType(MediaType.APPLICATION_JSON)
             .content(JsonUtil.writeValue(vote)))
                 .andExpect(status().isCreated())
@@ -56,6 +58,7 @@ class AdminVoteControllerTest extends AbstractControllerTest{
     void update() throws Exception {
         SecurityUtil.setAuthUserId(UserTestData.ADMIN1);
         perform(MockMvcRequestBuilders.put(REST_URL + VOTE_1)
+                .with(TestSecurityUtil.userHttpBasic(UserTestData.admin1))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getUpdatedDontChangeRestaurant())))
                 .andExpect(status().isNoContent())
@@ -70,7 +73,8 @@ class AdminVoteControllerTest extends AbstractControllerTest{
 
     @Test
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL + VOTE_1))
+        perform(MockMvcRequestBuilders.delete(REST_URL + VOTE_1)
+                .with(TestSecurityUtil.userHttpBasic(UserTestData.admin1)))
                 .andExpect(status().isNoContent())
                 .andDo(print());
 
@@ -79,7 +83,8 @@ class AdminVoteControllerTest extends AbstractControllerTest{
 
     @Test
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL))
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                .with(TestSecurityUtil.userHttpBasic(UserTestData.admin1)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -89,7 +94,8 @@ class AdminVoteControllerTest extends AbstractControllerTest{
 
     @Test
     void getWithUserAndRestaurant() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "with-user-and-restaurant"))
+        perform(MockMvcRequestBuilders.get(REST_URL + "with-user-and-restaurant")
+                .with(TestSecurityUtil.userHttpBasic(UserTestData.admin1)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -98,7 +104,8 @@ class AdminVoteControllerTest extends AbstractControllerTest{
 
     @Test
     void get() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + VOTE_1))
+        perform(MockMvcRequestBuilders.get(REST_URL + VOTE_1)
+                .with(TestSecurityUtil.userHttpBasic(UserTestData.admin1)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
