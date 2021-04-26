@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.jpa.repository.EntityGraph;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -27,11 +29,11 @@ public class Vote extends BaseEntity{
 
     @Column(name = "date")
     @NotNull
-    private LocalDate localDate;
+    private LocalDate localDate = LocalDate.now();
 
     @Column(name = "time")
     @NotNull
-    private LocalTime localTime;
+    private LocalTime localTime = LocalTime.now();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
@@ -40,24 +42,23 @@ public class Vote extends BaseEntity{
 
     @Column(name = "grade")
     @NotNull
+    @Min(0)
+    @Max(10)
     private int grade;
-
-    public Vote(Integer id, @NotNull User user, @NotNull LocalDate localDate, @NotNull LocalTime localTime, @NotNull Restaurant restaurant, @NotBlank int grade) {
-        super(id);
-        this.user = user;
-        this.localDate = localDate;
-        this.localTime = localTime;
-        this.restaurant = restaurant;
-        this.grade = grade;
-    }
 
     public Vote() {
 
     }
 
+    public Vote(Integer id, @NotNull User user, @NotNull Restaurant restaurant, @NotBlank int grade) {
+        super(id);
+        this.user = user;
+        this.restaurant = restaurant;
+        this.grade = grade;
+    }
+
     public Vote(Vote vote) {
-        this(vote.getId(), vote.getUser(), vote.getLocalDate(), vote.getLocalTime(),
-                vote.getRestaurant(), vote.getGrade());
+        this(vote.getId(), vote.getUser(), vote.getRestaurant(), vote.getGrade());
     }
 
     public LocalDate getLocalDate() {

@@ -7,12 +7,9 @@ import javax.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
 
-public class UserTo implements Serializable {
+public class UserTo extends BaseTo implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-
-    @NotNull
-    private Integer id;
 
     @NotBlank
     private String name;
@@ -33,15 +30,11 @@ public class UserTo implements Serializable {
     }
 
     public UserTo(Integer id, String name, String surName, String email, String password){
-        this.id = id;
+        super(id);
         this.name = name;
         this.surName = surName;
         this.email = email;
         this.password = password;
-    }
-
-    public Integer getId() {
-        return id;
     }
 
     public String getName() {
@@ -58,10 +51,6 @@ public class UserTo implements Serializable {
 
     public String getPassword() {
         return password;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public void setName(String name) {

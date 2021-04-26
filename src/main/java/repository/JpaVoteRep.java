@@ -59,16 +59,6 @@ public class JpaVoteRep implements VoteRepository {
     }
 
     @Override
-    public List<Vote> getAllTodayVoteByRestaurant(int restaurantId) {
-        return crudVoteRepository.getAllVoteByRestaurantAndLocalDate(restaurantId, LocalDate.now());
-    }
-
-    @Override
-    public List<Vote> getAllVoteByRestaurantAndLocalDate(int restaurantId, LocalDate localDate) {
-        return crudVoteRepository.getAllVoteByRestaurantAndLocalDate(restaurantId, localDate);
-    }
-
-    @Override
     public Vote getTodayVoteByUserId(int userId) {
         return crudVoteRepository.getVoteByUserIdAndLocalDate(userId, LocalDate.now());
     }

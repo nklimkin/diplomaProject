@@ -6,8 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import repository.RestaurantRepository;
 import repository.VoteRepository;
+import to.VoteTo;
 import util.RatingUtil;
-import util.ValidationUtil;
+import util.VoteUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -25,34 +26,40 @@ public class VoteService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public Vote create(Vote vote, int userId) {
+    public Vote create(VoteTo voteTo, int userId, int restaurantId) {
+        Vote vote = VoteUtil.createNewVoteFomToByUserIdAndRestaurantId(voteTo);
         checkNew(vote);
-        Assert.notNull(vote.getRestaurant().getId(), "id of restaurant of vote must not be null");
-        int restaurantId = vote.getRestaurant().getId();
-        restaurantRepository.updateRatingOfRestaurantNewVote(restaurantId, vote.getGrade());
+        restaurantRepository.updateRatingOfRestaurantByNewVote(restaurantId, vote.getGrade());
         return voteRepository.save(vote, userId, restaurantId);
     }
 
-    public void update(Vote vote, int userId, int idOfPastRestaurantForVote) {
+    public void update(VoteTo voteTo, int userId, int restaurantId) {
+        Vote vote = VoteUtil.createNewVoteFomToByUserIdAndRestaurantId(voteTo);
         checkUpdated(vote);
 //        checkTimeForUpdateVote(vote);
-        checkPossibilityOfUpdateVote(vote, userId);
-        Assert.notNull(vote.getRestaurant(), "restaurant must not be null");
-        Assert.notNull(vote.getRestaurant().getId(), "id of restaurant must not be null");
-        Restaurant newRestaurantForVote = vote.getRestaurant();
-        int idOfNewRestaurantForVote = newRestaurantForVote.getId();
-        voteRepository.save(vote, userId, newRestaurantForVote.getId());
+        voteRepository.save(vote, userId, restaurantId);
 
-        if (idOfNewRestaurantForVote == idOfPastRestaurantForVote) {
-            double newRatingOfRestaurant = RatingUtil.countTotalRating(getAllTodayVoteByRestaurant(idOfNewRestaurantForVote));
-            restaurantRepository.updateRatingOfSameRestaurantByUpdatedVote(
-                    newRestaurantForVote.getId(),
-                    newRatingOfRestaurant);
-        } else {
-            double newRatingOfLastRestaurant = RatingUtil.countTotalRating(getAllTodayVoteByRestaurant(idOfPastRestaurantForVote));
-            double newRatingOfNewRestaurant = RatingUtil.countTotalRating(getAllTodayVoteByRestaurant(idOfNewRestaurantForVote));
-            restaurantRepository.updateRatingOfTwoRestaurantsByUpdatedVote(idOfPastRestaurantForVote,
-                    idOfNewRestaurantForVote, newRatingOfLastRestaurant, newRatingOfNewRestaurant);
+        int idOfRestaurantTo = voteTo.getRestaurantId();
+
+        updateRating(idOfRestaurantTo, restaurantId);
+    }
+
+
+    private void updateRating(int idOfPastRestaurant, int idOfNewRestaurant) {
+        if (idOfPastRestaurant == idOfNewRestaurant) {
+            List<Vote> todayVotesOfCurrentRestaurant = getAllVoteByRestaurant(idOfPastRestaurant);
+            double newRating = RatingUtil.countTotalRating(todayVotesOfCurrentRestaurant);
+            restaurantRepository.updateRating(idOfPastRestaurant, newRating);
+        }
+
+        else {
+            List<Vote> todayVotesOfPastRestaurant = getAllVoteByRestaurant(idOfPastRestaurant);
+            double newRatingOfPastRestaurant = RatingUtil.countTotalRating(todayVotesOfPastRestaurant);
+            restaurantRepository.updateRating(idOfPastRestaurant, newRatingOfPastRestaurant);
+
+            List<Vote> todayVotesOfNewRestaurant = getAllVoteByRestaurant(idOfNewRestaurant);
+            double newRatingOfNewRestaurant = RatingUtil.countTotalRating(todayVotesOfNewRestaurant);
+            restaurantRepository.updateRating(idOfNewRestaurant, newRatingOfNewRestaurant);
         }
     }
 
@@ -60,14 +67,13 @@ public class VoteService {
         Vote currentVote = checkNotFoundWithId(voteRepository.get(id), id);
         LocalDate currentLocalDate = currentVote.getLocalDate();
         Restaurant currentRestaurant = currentVote.getRestaurant();
-        Assert.notNull(currentRestaurant, "restaurant must not be null");
         Integer idOfRestaurant = currentRestaurant.getId();
         Assert.notNull(idOfRestaurant, "id of restaurant must not be null");
         voteRepository.delete(id);
-        List<Vote> allVoteInThatDay = voteRepository.getAllVoteByRestaurantAndLocalDate(idOfRestaurant, currentLocalDate);
-        System.out.println(allVoteInThatDay);
-        double newRating = RatingUtil.countTotalRating(allVoteInThatDay);
-        restaurantRepository.updateRatingOfSameRestaurantByUpdatedVote(idOfRestaurant, newRating);
+
+        List<Vote> todayVotesOfRestaurant = getAllVoteByRestaurant(idOfRestaurant);
+        double newRating = RatingUtil.countTotalRating(todayVotesOfRestaurant);
+        restaurantRepository.updateRating(idOfRestaurant, newRating);
     }
 
     public List<Vote> getAll() {
@@ -84,14 +90,6 @@ public class VoteService {
 
     public List<Vote> getAllVoteByRestaurant(int restaurantId) {
         return checkNotFountWithSomeAttribute(voteRepository.getAllVoteByRestaurant(restaurantId), restaurantId);
-    }
-
-    public List<Vote> getAllTodayVoteByRestaurant(int restaurantId) {
-        return checkNotFountWithSomeAttribute(voteRepository.getAllTodayVoteByRestaurant(restaurantId), restaurantId);
-    }
-
-    public List<Vote> getAllVoteByRestaurantAndLocalDate(int restaurantId, LocalDate localDate) {
-        return voteRepository.getAllVoteByRestaurantAndLocalDate(restaurantId, localDate);
     }
 
     public Vote getTodayByUser(int userId) {

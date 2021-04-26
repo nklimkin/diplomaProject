@@ -13,6 +13,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.VoteService;
+import to.VoteTo;
 import util.SecurityUtil;
 import util.ValidationUtil;
 
@@ -25,12 +26,10 @@ public abstract class AbstractVoteController {
     @Autowired
     private VoteService service;
 
-    public void update(Vote vote, int voteId, int userId) {
-        log.info("update vote {} with id={}", vote, voteId);
-        ValidationUtil.assureIdConsistent(vote, voteId);
-        Restaurant restaurantOfVote = vote.getRestaurant();
-        Assert.notNull(restaurantOfVote.getId(), "restaurant must not have id = null");
-        service.update(vote, userId, restaurantOfVote.getId());
+    public void update(VoteTo voteTo, int voteToId, int userId, int restaurantId) {
+        log.info("update vote {} with id={}", voteTo, voteToId);
+        ValidationUtil.assureIdConsistent(voteTo, voteToId);
+        service.update(voteTo, userId, restaurantId);
     }
 
     public void delete(int id) {
@@ -38,9 +37,9 @@ public abstract class AbstractVoteController {
         service.delete(id);
     }
 
-    public Vote save(Vote vote) {
-        log.info("create vote {} ", vote);
-        return service.create(vote, SecurityUtil.authUserId());
+    public Vote save(VoteTo voteTo, int userId, int restaurantId) {
+        log.info("create vote {} ", voteTo);
+        return service.create(voteTo, userId, restaurantId);
     }
 
     public Vote get(int id) {

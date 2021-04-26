@@ -1,10 +1,8 @@
 package repository;
 
-import model.Dish;
 import model.Restaurant;
 import model.Status;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import util.RatingUtil;
@@ -57,7 +55,7 @@ public class JpaRestaurantRep implements RestaurantRepository{
 
     @Transactional
     @Override
-    public void updateRatingOfRestaurantNewVote(int id, int grade) {
+    public void updateRatingOfRestaurantByNewVote(int id, int grade) {
         Restaurant currentRestaurant = get(id);
 
         currentRestaurant.setRating(RatingUtil.countNewRating(
@@ -69,18 +67,10 @@ public class JpaRestaurantRep implements RestaurantRepository{
 
     @Transactional
     @Override
-    public void updateRatingOfSameRestaurantByUpdatedVote(int restaurantId, double countTotalRating) {
+    public void updateRating(int restaurantId, double newRating) {
         Restaurant currentRestaurant = get(restaurantId);
-        currentRestaurant.setRating(countTotalRating);
+        currentRestaurant.setRating(newRating);
         currentRestaurant.setCountOfVoters(currentRestaurant.getCountOfVoters() + 1);
         save(currentRestaurant);
     }
-
-    @Transactional
-    @Override
-    public void updateRatingOfTwoRestaurantsByUpdatedVote(int idOfPastRestaurant, int idOfCurrentRestaurant, double newRatingOfPastRestaurant, double newRatingOfCurrentRestaurant) {
-        updateRatingOfSameRestaurantByUpdatedVote(idOfPastRestaurant, newRatingOfPastRestaurant);
-        updateRatingOfSameRestaurantByUpdatedVote(idOfCurrentRestaurant, newRatingOfCurrentRestaurant);
-    }
-
 }

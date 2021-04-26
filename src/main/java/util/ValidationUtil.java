@@ -4,6 +4,7 @@ import model.BaseEntity;
 import model.User;
 import model.Vote;
 import org.springframework.util.Assert;
+import to.BaseTo;
 import to.UserTo;
 import util.Exception.NotFoundException;
 import util.Exception.TimeForVoteException;
@@ -27,11 +28,11 @@ public class ValidationUtil {
             throw new IllegalArgumentException(be + " is a new entity");
     }
 
-    public static void checkUpdated(UserTo userTo) {
-        if (userTo == null)
+    public static void checkUpdated(BaseTo b) {
+        if (b == null)
             throw new IllegalArgumentException("argument must be not null");
-        if (userTo.getId() == null)
-            throw new IllegalArgumentException(userTo + " is a new entity");
+        if (b.getId() == null)
+            throw new IllegalArgumentException(b + " is a new entity");
     }
 
     public static <T> T checkNotFoundWithId(T be, int id) {
@@ -71,8 +72,8 @@ public class ValidationUtil {
             throw new IllegalArgumentException("user must be with id = " + id);
     }
 
-    public static void assureIdConsistent(UserTo userTo, int id) {
-        if (userTo.getId() != id)
+    public static void assureIdConsistent(BaseTo b, int id) {
+        if (b.getId() != id)
             throw new IllegalArgumentException("user must be with id = " + id);
     }
 

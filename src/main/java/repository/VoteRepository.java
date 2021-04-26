@@ -19,9 +19,5 @@ public interface VoteRepository {
 
     List<Vote> getAllVoteByRestaurant(int restaurantId);
 
-    List<Vote> getAllTodayVoteByRestaurant(int restaurantId);
-
-    List<Vote> getAllVoteByRestaurantAndLocalDate(int restaurantId, LocalDate localDate);
-
     Vote getTodayVoteByUserId(int userId);
 }

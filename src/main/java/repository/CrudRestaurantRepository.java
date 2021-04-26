@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Entity;
+import java.time.LocalDate;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -23,6 +24,9 @@ public interface CrudRestaurantRepository extends JpaRepository<Restaurant, Inte
     @Query("SELECT r FROM Restaurant r ORDER BY r.rating DESC")
     Restaurant getAllOrderByRating();
 
+    List<Restaurant> getAllByDate(LocalDate localDate);
+
     @EntityGraph(attributePaths = {"menu"})
     Restaurant getRestaurantById(int id);
+
 }

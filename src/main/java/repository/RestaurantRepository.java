@@ -19,9 +19,8 @@ public interface RestaurantRepository {
 
     Restaurant getWithDishes(int id);
 
-    void updateRatingOfRestaurantNewVote(int id, int grade);
+    void updateRatingOfRestaurantByNewVote(int id, int grade);
 
-    void updateRatingOfSameRestaurantByUpdatedVote(int restaurantId, double countTotalRating);
+    void updateRating(int restaurantId, double countTotalRating);
 
-    void updateRatingOfTwoRestaurantsByUpdatedVote(int idOfPastRestaurant, int idOfCurrentRestaurant, double newRatingOfPastRestaurant, double newRatingOfCurrentRestaurant);
 }

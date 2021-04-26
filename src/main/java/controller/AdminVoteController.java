@@ -1,5 +1,6 @@
 package controller;
 
+import authorized.AuthorizedUser;
 import model.Restaurant;
 import model.User;
 import model.Vote;
@@ -9,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.VoteService;
+import to.VoteTo;
 import util.SecurityUtil;
 
 import java.net.URI;
@@ -35,8 +38,10 @@ public class AdminVoteController extends AbstractVoteController{
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Vote> saveWithLocation(@RequestBody Vote vote) {
-        Vote v = super.save(vote);
+    public ResponseEntity<Vote> saveWithLocation(@RequestBody VoteTo voteTo,
+                                                 @RequestParam("restaurant") int restaurantId,
+                                                 @AuthenticationPrincipal AuthorizedUser authorizedUser) {
+        Vote v = super.save(voteTo, authorizedUser.getId(), restaurantId);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(URL + "/{id}")
                 .buildAndExpand(v.getId()).toUri();
@@ -45,8 +50,10 @@ public class AdminVoteController extends AbstractVoteController{
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Vote vote, @PathVariable int id) {
-        super.update(vote, id, vote.getUser().getId());
+    public void update(@RequestBody VoteTo voteTo, @PathVariable int id,
+                       @RequestParam("restaurant") int restaurantId,
+                       @AuthenticationPrincipal AuthorizedUser authorizedUser) {
+        super.update(voteTo, id, authorizedUser.getId(), restaurantId);
     }
 
     @DeleteMapping("/{id}")

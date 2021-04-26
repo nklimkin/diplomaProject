@@ -13,6 +13,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import service.VoteService;
+import to.VoteTo;
 import util.SecurityUtil;
 
 import java.net.URI;
@@ -31,11 +32,12 @@ public class ProfileVoteController extends AbstractVoteController{
         this.service = service;
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody Vote vote, @AuthenticationPrincipal AuthorizedUser authorizedUser) {
-        Assert.notNull(vote.getId(), "vote id cant have be null");
-        super.update(vote, vote.getId(), authorizedUser.getId());
+    public void update(@RequestBody VoteTo voteTo, @PathVariable int id,
+                       @RequestParam("restaurant") int restaurantId,
+                       @AuthenticationPrincipal AuthorizedUser authorizedUser) {
+        super.update(voteTo, id, authorizedUser.getId(), restaurantId);
     }
 
     @GetMapping
@@ -46,8 +48,10 @@ public class ProfileVoteController extends AbstractVoteController{
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Vote> createWithLocation(@RequestBody Vote vote) {
-        Vote v = super.save(vote);
+    public ResponseEntity<Vote> createWithLocation(@RequestBody VoteTo voteTo,
+                                                   @RequestParam("restaurant") int restaurantId,
+                                                   @AuthenticationPrincipal AuthorizedUser authorizedUser) {
+        Vote v = super.save(voteTo, authorizedUser.getId(), restaurantId);
         URI uri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(URL + "/{id}")
                 .buildAndExpand(v.getId()).toUri();
