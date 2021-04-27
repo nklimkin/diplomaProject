@@ -17,7 +17,7 @@ public class UserTestData {
     public static final int NEW = 100014;
 
     public static User user1 = new User(100000, "user1", "user1_surName", "user1@email.ru",
-            "user1_pass", Status.ACTIVE,  UserRoles.USER);
+            "user1_pass", Status.ACTIVE,  UserRoles.ADMIN, UserRoles.USER);
 
     public static User user2 = new User(100001, "user2", "user2_surName", "user2@email.ru",
             "user2_pass", Status.ACTIVE, UserRoles.USER);
@@ -29,9 +29,9 @@ public class UserTestData {
             UserRoles.USER);
 
     public static User updated = new User(100000, "update", "update_surName", "updated@email.ru", "updUser_pass", Status.ACTIVE,
-            UserRoles.USER);
+            UserRoles.USER, UserRoles.ADMIN);
 
-    public static List<User> users = List.of(admin1, user1, user2);
+    public static List<User> users = List.of(user1, user2, admin1);
 
     public static User getNew(){
         return new User(null, "newUser", "newUser_surname", "newuser@email.ru", "newUser_pass", Status.ACTIVE, UserRoles.USER);

@@ -3,7 +3,9 @@ package controller;
 import model.Restaurant;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import testData.UserTestData;
 import util.TestMatcher;
+import util.TestSecurityUtil;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -20,7 +22,8 @@ class RestaurantProfileControllerTest extends AbstractControllerTest{
 
     @Test
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL))
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                .with(TestSecurityUtil.userHttpBasic(UserTestData.user2)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(TestMatcher.contentJson(restaurants, fieldsToIgnore, Restaurant.class));
@@ -29,7 +32,8 @@ class RestaurantProfileControllerTest extends AbstractControllerTest{
 
     @Test
     public void getBestOne() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "best"))
+        perform(MockMvcRequestBuilders.get(REST_URL + "best")
+                .with(TestSecurityUtil.userHttpBasic(UserTestData.user2)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(TestMatcher.contentJson(restaurant3, fieldsToIgnore, Restaurant.class));
@@ -37,7 +41,8 @@ class RestaurantProfileControllerTest extends AbstractControllerTest{
 
     @Test
     public void getWithMenu() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "with-dishes/" + RESTAURANT_1))
+        perform(MockMvcRequestBuilders.get(REST_URL + "with-dishes/" + RESTAURANT_1)
+                .with(TestSecurityUtil.userHttpBasic(UserTestData.user2)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(TestMatcher.contentJson(restaurant1, new String[]{"date"}, Restaurant.class));

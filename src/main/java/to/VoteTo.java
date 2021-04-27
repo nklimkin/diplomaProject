@@ -13,14 +13,14 @@ public class VoteTo extends BaseTo implements Serializable {
     @Max(10)
     private int grade;
 
-    @NotNull
-    private int restaurantId;
+    // Ресторан за который проголосовали до обновления голоса
+    private Integer restaurantId;
 
     public VoteTo() {
 
     }
 
-    public VoteTo(Integer id, int grade, int restaurantId) {
+    public VoteTo(Integer id, int grade, Integer restaurantId) {
         super(id);
         this.grade = grade;
         this.restaurantId = restaurantId;
@@ -34,7 +34,7 @@ public class VoteTo extends BaseTo implements Serializable {
         this.grade = grade;
     }
 
-    public int getRestaurantId() {
+    public Integer getRestaurantId() {
         return restaurantId;
     }
 

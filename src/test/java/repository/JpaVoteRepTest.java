@@ -33,7 +33,7 @@ public class JpaVoteRepTest {
         rep.save(VoteTestData.getNew(),
                 UserTestData.USER1, RestaurantTestData.RESTAURANT_1);
         assertThat(rep.get(VoteTestData.VOTE_NEW)).isEqualToIgnoringGivenFields(
-                VoteTestData.newVote,"restaurant", "user");
+                VoteTestData.newVote,"restaurant", "user", "localTime");
     }
 
     @Test
@@ -45,12 +45,12 @@ public class JpaVoteRepTest {
     @Test
     public void get() {
         assertThat(rep.get(VoteTestData.VOTE_1)).isEqualToIgnoringGivenFields(VoteTestData.vote1,
-                "restaurant", "user");
+                "restaurant", "user", "localTime");
     }
 
     @Test
     public void getAll() {
-        assertThat(rep.getAll()).usingElementComparatorIgnoringFields("restaurant", "user")
+        assertThat(rep.getAll()).usingElementComparatorIgnoringFields("restaurant", "user", "localTime")
                 .containsExactlyInAnyOrder(VoteTestData.vote1,
                         VoteTestData.vote2);
     }
@@ -58,7 +58,6 @@ public class JpaVoteRepTest {
     @Test
     public void getAllVoteByRestaurant() {
         assertThat(rep.getAllVoteByRestaurant(RestaurantTestData.RESTAURANT_1)).usingElementComparatorIgnoringFields(
-                "restaurant", "user").isEqualTo(List.of(VoteTestData.vote1,
-                VoteTestData.vote2));
+                "restaurant", "user", "localTime").isEqualTo(List.of(VoteTestData.vote1));
     }
 }

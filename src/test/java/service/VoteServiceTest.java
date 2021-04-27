@@ -13,6 +13,7 @@ import testData.RestaurantTestData;
 import testData.UserTestData;
 import testData.VoteTestData;
 import util.Exception.NotFoundException;
+import util.VoteUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -40,7 +41,7 @@ public class VoteServiceTest {
 
     @Test
     public void create() {
-        voteService.create(getNew(), UserTestData.ADMIN1);
+        voteService.create(VoteTestData.getNewTo(), UserTestData.USER1, RestaurantTestData.RESTAURANT_1);
         assertThat(voteService.get(VOTE_NEW)).usingRecursiveComparison()
                 .ignoringFields(fieldToIgnore)
                 .isEqualTo(newVote);
@@ -51,7 +52,7 @@ public class VoteServiceTest {
 
     @Test
     public void updateWithoutChangingRestaurant() {
-        voteService.update(getUpdatedDontChangeRestaurant(), UserTestData.USER1, RestaurantTestData.RESTAURANT_1);
+        voteService.update(getUpdatedTo(), UserTestData.USER1, RestaurantTestData.RESTAURANT_1);
         assertThat(voteService.get(VOTE_1)).usingRecursiveComparison()
                 .ignoringFields(fieldToIgnore)
                 .isEqualTo(updatedVoteWithoutChangingRestaurant);
@@ -62,7 +63,7 @@ public class VoteServiceTest {
 
     @Test
     public void updateWithChangingRestaurant() {
-        voteService.update(getUpdatedChangeRestaurant(), UserTestData.USER1, RestaurantTestData.RESTAURANT_1);
+        voteService.update(getUpdatedTo(), UserTestData.USER1, RestaurantTestData.RESTAURANT_2);
         assertThat(voteService.get(VOTE_1)).usingRecursiveComparison()
                 .ignoringFields(fieldToIgnore)
                 .isEqualTo(updatedVoteWithChangingRestaurant);
@@ -101,19 +102,6 @@ public class VoteServiceTest {
         assertThat(voteService.getAllVoteByRestaurant(RestaurantTestData.RESTAURANT_1))
                 .usingElementComparatorIgnoringFields(fieldToIgnore)
                 .containsExactlyInAnyOrder(vote1);
-    }
-
-    @Test
-    public void getAllTodayVoteByRestaurant() {
-        assertThat(voteService.getAllTodayVoteByRestaurant(RestaurantTestData.RESTAURANT_1))
-                .usingElementComparatorIgnoringFields(fieldToIgnore)
-                .containsExactlyInAnyOrder(vote1);
-    }
-
-    @Test
-    public void getAllVoteByRestaurantAndLocalDate() {
-        assertThat(voteService.getAllVoteByRestaurantAndLocalDate(RestaurantTestData.RESTAURANT_1, LocalDate.MAX))
-                .isEmpty();
     }
 
     @Test

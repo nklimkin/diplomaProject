@@ -7,12 +7,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import service.VoteService;
+import testData.RestaurantTestData;
 import testData.UserTestData;
+import to.VoteTo;
+import util.*;
 import util.Exception.NotFoundException;
-import util.TestMatcher;
-import util.JsonUtil;
-import util.SecurityUtil;
-import util.TestSecurityUtil;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -32,17 +31,19 @@ class AdminVoteControllerTest extends AbstractControllerTest{
 
     @Test
     void save() throws Exception {
-
-        Vote vote = getNew();
-        ResultActions actions = perform(MockMvcRequestBuilders.post(REST_URL)
-            .with(TestSecurityUtil.userHttpBasic(UserTestData.admin1))
+        VoteTo voteTo = getNewTo();
+        ResultActions actions = perform(MockMvcRequestBuilders.post(AdminVoteController.URL + "?restaurant=" + RestaurantTestData.RESTAURANT_1)
+            .with(TestSecurityUtil.userHttpBasic(UserTestData.user1))
             .contentType(MediaType.APPLICATION_JSON)
-            .content(JsonUtil.writeValue(vote)))
+            .content(JsonUtil.writeValue(voteTo)))
                 .andExpect(status().isCreated())
                 .andDo(print());
 
         Vote created = JsonUtil.readValueFromJsonResultActions(actions, Vote.class);
         int id = created.getId();
+        Vote vote = VoteUtil.createVoteFromVoteTo(voteTo);
+        vote.setUser(UserTestData.user1);
+        vote.setRestaurant(RestaurantTestData.restaurant1);
         vote.setId(id);
 
         assertThat(created).usingRecursiveComparison()
@@ -56,19 +57,16 @@ class AdminVoteControllerTest extends AbstractControllerTest{
 
     @Test
     void update() throws Exception {
-        SecurityUtil.setAuthUserId(UserTestData.ADMIN1);
-        perform(MockMvcRequestBuilders.put(REST_URL + VOTE_1)
+        perform(MockMvcRequestBuilders.put(REST_URL + VOTE_1 + "?restaurant=" + RestaurantTestData.RESTAURANT_1)
                 .with(TestSecurityUtil.userHttpBasic(UserTestData.admin1))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(getUpdatedDontChangeRestaurant())))
+                .content(JsonUtil.writeValue(getUpdatedTo())))
                 .andExpect(status().isNoContent())
                 .andDo(print());
 
         assertThat(service.get(VOTE_1)).usingRecursiveComparison()
                 .ignoringFields(fieldToIgnore)
                 .isEqualTo(updatedVoteWithoutChangingRestaurant);
-
-        SecurityUtil.setAuthUserId(UserTestData.USER1);
     }
 
     @Test

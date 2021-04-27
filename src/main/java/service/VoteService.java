@@ -34,8 +34,9 @@ public class VoteService {
     }
 
     public void update(VoteTo voteTo, int userId, int restaurantId) {
-        Vote vote = VoteUtil.createNewVoteFomToByUserIdAndRestaurantId(voteTo);
+        Vote vote = VoteUtil.createVoteFromVoteTo(voteTo);
         checkUpdated(vote);
+        Assert.notNull(voteTo.getRestaurantId(), "restaurant Id cant be null if you want to update vote");
 //        checkTimeForUpdateVote(vote);
         voteRepository.save(vote, userId, restaurantId);
 

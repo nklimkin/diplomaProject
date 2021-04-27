@@ -40,27 +40,27 @@ public class JpaUserRepTest {
         User save = rep.save(UserTestData.getNew());
         User actual = rep.get(UserTestData.NEW);
         User expected = UserTestData.newUser;
-        assertThat(actual).isEqualToIgnoringGivenFields(expected, "registered");
+        assertThat(actual).isEqualToIgnoringGivenFields(expected, "registered", "password");
     }
 
     @Test
     public void get() {
         User actual = rep.get(UserTestData.USER1);
         User expected = UserTestData.user1;
-        assertThat(actual).isEqualToIgnoringGivenFields(expected, "registered");
+        assertThat(actual).isEqualToIgnoringGivenFields(expected, "registered", "password");
     }
 
     @Test
     public void getByEmail() {
         User actual = rep.getByEmail("user1@email.ru");
         User expected = UserTestData.user1;
-        assertThat(actual).isEqualToIgnoringGivenFields(expected, "registered");
+        assertThat(actual).isEqualToIgnoringGivenFields(expected, "registered", "password");
     }
 
     @Test
     public void getAll() {
         List<User> actualUsers = rep.getAll();
-        assertThat(actualUsers).usingElementComparatorIgnoringFields("registered")
+        assertThat(actualUsers).usingElementComparatorIgnoringFields("registered", "password")
                 .containsExactlyInAnyOrder(UserTestData.user1, UserTestData.user2, UserTestData.admin1);
     }
 

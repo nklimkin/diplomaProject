@@ -41,8 +41,8 @@ public class ProfileVoteController extends AbstractVoteController{
     }
 
     @GetMapping
-    public Vote get() {
-        Vote todayVote = service.getTodayByUser(SecurityUtil.authUserId());
+    public Vote get(@AuthenticationPrincipal AuthorizedUser authorizedUser) {
+        Vote todayVote = service.getTodayByUser(authorizedUser.getId());
         Assert.notNull(todayVote.getId(), "id of vote cant be null");
         return super.get(todayVote.getId());
     }
@@ -60,8 +60,8 @@ public class ProfileVoteController extends AbstractVoteController{
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete() {
-        Vote todayVote = service.getTodayByUser(SecurityUtil.authUserId());
+    public void delete(@AuthenticationPrincipal AuthorizedUser authorizedUser) {
+        Vote todayVote = service.getTodayByUser(authorizedUser.getId());
         Assert.notNull(todayVote.getId(), "id of vote cant be null");
         super.delete(todayVote.getId());
     }

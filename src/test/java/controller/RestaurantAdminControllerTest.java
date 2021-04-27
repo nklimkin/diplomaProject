@@ -8,8 +8,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import service.RestaurantService;
+import testData.UserTestData;
 import util.TestMatcher;
 import util.JsonUtil;
+import util.TestSecurityUtil;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,6 +33,7 @@ public class RestaurantAdminControllerTest extends AbstractControllerTest {
     public void save() throws Exception {
         Restaurant restaurant = getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+                    .with(TestSecurityUtil.userHttpBasic(UserTestData.user1))
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(JsonUtil.writeValue(restaurant)))
                     .andDo(print());
@@ -52,6 +55,7 @@ public class RestaurantAdminControllerTest extends AbstractControllerTest {
     public void update() throws Exception {
         Restaurant updated = getUpdated();
         perform(MockMvcRequestBuilders.put(REST_URL + RESTAURANT_1)
+        .with(TestSecurityUtil.userHttpBasic(UserTestData.admin1))
         .contentType(MediaType.APPLICATION_JSON)
         .content(JsonUtil.writeValue(updated))).andExpect(status().isNoContent()).andDo(print());
 
@@ -62,14 +66,17 @@ public class RestaurantAdminControllerTest extends AbstractControllerTest {
 
     @Test
     public void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(REST_URL + RESTAURANT_1)).andExpect(status().isNoContent())
+        perform(MockMvcRequestBuilders.delete(REST_URL + RESTAURANT_1)
+        .with(TestSecurityUtil.userHttpBasic(UserTestData.admin1)))
+        .andExpect(status().isNoContent())
         .andDo(print());
         assertThat(service.get(RESTAURANT_1).getStatus()).isEqualTo(Status.DELETE);
     }
 
     @Test
     public void get() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT_1))
+        perform(MockMvcRequestBuilders.get(REST_URL + RESTAURANT_1)
+                .with(TestSecurityUtil.userHttpBasic(UserTestData.admin1)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -78,7 +85,8 @@ public class RestaurantAdminControllerTest extends AbstractControllerTest {
 
     @Test
     public void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL))
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                .with(TestSecurityUtil.userHttpBasic(UserTestData.admin1)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(TestMatcher.contentJson(restaurants, fieldsToIgnore, Restaurant.class));
@@ -86,7 +94,8 @@ public class RestaurantAdminControllerTest extends AbstractControllerTest {
 
     @Test
     public void getBestOne() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "best"))
+        perform(MockMvcRequestBuilders.get(REST_URL + "best")
+                .with(TestSecurityUtil.userHttpBasic(UserTestData.admin1)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(TestMatcher.contentJson(restaurant3, fieldsToIgnore, Restaurant.class));
@@ -94,7 +103,8 @@ public class RestaurantAdminControllerTest extends AbstractControllerTest {
 
     @Test
     public void getWithMenu() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "with-dishes/" + RESTAURANT_1))
+        perform(MockMvcRequestBuilders.get(REST_URL + "with-dishes/" + RESTAURANT_1)
+                .with(TestSecurityUtil.userHttpBasic(UserTestData.admin1)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(TestMatcher.contentJson(restaurant1, new String[]{"date"}, Restaurant.class));
